@@ -14,12 +14,20 @@ export const AuthProvider = ({ children }) => {
     return firebase.auth().onIdTokenChanged(async (user) => {
       if (!user) {
         setUser(null);
-        nookies.set(undefined, "token", "", {});
+        localStorage.setItem("token", "");
+        // nookies.set(undefined, "token", "", {
+        //   sameSite: "none",
+        //   secure: true,
+        // });
         return;
       }
       const token = await user.getIdToken();
       setUser(user);
-      nookies.set(undefined, "token", token, {});
+      localStorage.setItem("token", token);
+      // nookies.set(undefined, "token", token, {
+      //   sameSite: "none",
+      //   secure: true,
+      // });
     });
   }, []);
 
