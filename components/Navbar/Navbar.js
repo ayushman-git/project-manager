@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "./Navbar.module.scss";
 import Image from "next/image";
+import styles from "./Navbar.module.scss";
 
 export default function Navbar(props) {
   return (
@@ -10,8 +10,8 @@ export default function Navbar(props) {
         <Image
           className={styles.navImg}
           src={props.image}
-          width={50}
-          height={50}
+          width={40}
+          height={40}
         />
       </div>
     </nav>

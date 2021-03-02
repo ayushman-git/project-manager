@@ -9,6 +9,7 @@ import NavBar from "../../components/Navbar/Navbar";
 import ProjectOverviewMain from "../../components/ProjectOverviewMain/ProjectOverviewMain";
 
 export default function User({ session }) {
+  let view;
   const router = useRouter();
   const signOut = async () => {
     await firebase.auth().signOut();
@@ -17,7 +18,7 @@ export default function User({ session }) {
   console.log(session);
   firebaseClient();
   if (session) {
-    return (
+    view = (
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <NavBar image={session.picture} />
         <ProjectOverviewMain />
@@ -27,6 +28,7 @@ export default function User({ session }) {
   } else {
     router.push("/");
   }
+  return <main>{view}</main>;
 }
 
 export async function getServerSideProps(context) {
@@ -35,10 +37,15 @@ export async function getServerSideProps(context) {
     const token = await verifyIdToken(cookies.token);
     return {
       props: {
-        session: token || null,
+        session: token,
       },
     };
   } catch (err) {
-    console.log(err);
+    console.log("err");
+    context.res.writeHead(302, { location: "/ " });
+    context.res.end();
+    return {
+      props: null,
+    };
   }
 }
