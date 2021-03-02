@@ -27,7 +27,6 @@ const Home = () => {
         const credential = result.credential;
         const token = credential.accessToken;
         const user = result.user;
-        console.log(user);
         router.push("/user/" + user.displayName.split(" ")[0].toLowerCase());
       })
       .catch((error) => {

@@ -1,0 +1,22 @@
+.card {
+  min-width: 12rem;
+  min-height: 8rem;
+  display: flex;
+  gap: 1rem;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  user-select: none;
+  cursor: pointer;
+  transition: 0.4s ease-in-out all;
+}
+
+.card:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+.card h3 {
+  color: white;
+  margin: 0;
+}

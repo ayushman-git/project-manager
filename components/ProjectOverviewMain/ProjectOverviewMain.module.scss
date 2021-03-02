@@ -3,15 +3,21 @@
 .projectCard {
   border-radius: $borderRadius;
   background-color: antiquewhite;
-  padding: 0.6rem 2.4rem;
+  padding: 4rem;
   display: flex;
   justify-content: space-between;
+  margin-top: 2rem;
 }
 
 .cardHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.cardHeader h2 {
+  font-size: 3rem;
+  margin-top: 0;
 }
 
 .tag {
@@ -21,7 +27,14 @@
   margin-left: 0.6rem;
 }
 
-.leftBar,
+.leftBar {
+  width: 65%;
+}
+
 .rightBar {
-  width: 50%;
+  width: 30%;
+}
+
+.rightBarHeader {
+  text-align: center;
 }

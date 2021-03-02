@@ -3,6 +3,7 @@ import styles from "./ProjectOverviewMain.module.scss";
 import DueDate from "../DueDate/DueDate";
 import Shortcuts from "../Shortcuts/Shortcuts";
 import ProgressBar from "../ProgressBar/ProgressBar";
+import Todos from "../Todos/Todos";
 
 export default function ProjectOverviewMain() {
   const [shortcuts] = useState([
@@ -19,6 +20,11 @@ export default function ProjectOverviewMain() {
       image: "https://cdn.worldvectorlogo.com/logos/firebase-1.svg",
     },
   ]);
+  const [todos] = useState([
+    { description: "Complete astronomia" },
+    { description: "Complete login" },
+    { description: "Update leveling" },
+  ]);
   return (
     <section className={styles.projectCard}>
       <article className={styles.leftBar}>
@@ -26,12 +32,17 @@ export default function ProjectOverviewMain() {
           <h2>
             Astronomia<span className={styles.tag}>#Programming</span>
           </h2>
-          <DueDate />
+          <DueDate days={5} />
         </header>
         <Shortcuts shortcuts={shortcuts} />
         <ProgressBar storiesDone={20} totalStories={40} />
       </article>
-      <article className={styles.rightBar}>hi</article>
+      <article className={styles.rightBar}>
+        <header className={styles.rightBarHeader}>
+          <h3>STORIES</h3>
+        </header>
+        <Todos todos={todos} />
+      </article>
     </section>
   );
 }

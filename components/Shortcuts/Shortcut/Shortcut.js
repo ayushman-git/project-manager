@@ -3,7 +3,6 @@ import Image from "next/image";
 import styles from "./Shortcut.module.scss";
 
 export default function Shortcut(props) {
-  console.log(props);
   return (
     <a
       href={props.url}

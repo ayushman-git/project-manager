@@ -3,12 +3,37 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.6rem 0;
+  position: relative;
 }
 
-.navImgWrap img {
-  border: 50%;
-}
-
-.navImg {
+.navImgWrap {
   border-radius: 50%;
+  overflow: hidden;
+  height: 40px;
+  width: 40px;
+  position: relative;
+  transition: 0.4s ease-in-out all;
+}
+
+.navImgWrap:hover {
+  border-radius: 30%;
+}
+
+.dropdown {
+  position: absolute;
+  right: -35px;
+  top: 52px;
+}
+
+.dropdown button {
+  border: none;
+  outline: none;
+  padding: 0.4rem 2rem;
+  background-color: rgba(218, 218, 218, 0.5);
+  transition: 0.4s ease-in-out all;
+  cursor: pointer;
+}
+
+.dropdown button:hover {
+  background-color: rgb(179, 86, 255, 0.4);
 }
