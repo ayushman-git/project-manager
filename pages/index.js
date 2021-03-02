@@ -1,11 +1,11 @@
-import Head from "next/head";
 import Image from "next/image";
 import styles from "./index.module.scss";
-import firebaseClient from "../auth/firebaseClient";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { useRouter } from "next/router";
 
 const Home = () => {
+  const router = useRouter();
   const loginViaGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     logInWithProvider(provider);
@@ -27,12 +27,10 @@ const Home = () => {
         const credential = result.credential;
         const token = credential.accessToken;
         const user = result.user;
+        console.log(user);
+        router.push("/user/" + user.displayName.split(" ")[0].toLowerCase());
       })
       .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
         console.log(error);
       });
   };
