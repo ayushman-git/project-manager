@@ -9,26 +9,8 @@ import Projects from "../../components/Projects/Projects";
 import NavBar from "../../components/Navbar/Navbar";
 import ProjectOverviewMain from "../../components/ProjectOverviewMain/ProjectOverviewMain";
 
-export default function User({ session }) {
+export default function User({ session, projects }) {
   let view;
-  const [projects] = useState([
-    {
-      title: "Mitio",
-      days: 4,
-      theme: {
-        start: "#C6426E",
-        end: "#642B73",
-      },
-    },
-    {
-      title: "Penumbra",
-      days: 10,
-      theme: {
-        start: "#0f3443",
-        end: "#34e89e",
-      },
-    },
-  ]);
   const router = useRouter();
   const signOut = async () => {
     await firebase.auth().signOut();
@@ -40,8 +22,8 @@ export default function User({ session }) {
     view = (
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <NavBar image={session.picture} />
-        <ProjectOverviewMain />
-        <Projects projects={projects} />
+        <ProjectOverviewMain project={projects.filter((pr) => pr.active)} />
+        <Projects projects={projects.filter((pr) => !pr.active)} />
         <button onClick={signOut.bind(this)}>Sign Out</button>
       </div>
     );
@@ -55,14 +37,28 @@ export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
     const token = await verifyIdToken(cookies.token);
+    const db = firebase.firestore();
+    const projects = [];
+    const snapshot = await db.collection("projects").get();
+    snapshot.forEach((doc) => {
+      if (doc.data().userId === token.uid) {
+        projects.push({
+          ...doc.data(),
+          id: doc.id,
+          dueDate: doc.data().dueDate.toDate(),
+        });
+      }
+    });
+    console.log(projects);
     return {
       props: {
         session: token,
+        projects: JSON.parse(JSON.stringify(projects)),
       },
     };
   } catch (err) {
     console.log("err");
-    context.res.writeHead(302, { location: "/ " });
+    context.res.writeHead(302, { location: "/" });
     context.res.end();
     return {
       props: null,

@@ -5,7 +5,7 @@ import Shortcuts from "../Shortcuts/Shortcuts";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import Todos from "../Todos/Todos";
 
-export default function ProjectOverviewMain() {
+export default function ProjectOverviewMain(props) {
   const [shortcuts] = useState([
     {
       title: "Firebase",
@@ -30,7 +30,8 @@ export default function ProjectOverviewMain() {
       <article className={styles.leftBar}>
         <header className={styles.cardHeader}>
           <h2>
-            Astronomia<span className={styles.tag}>#Programming</span>
+            {props.project[0].projectName}
+            <span className={styles.tag}>#{props.project[0].tag}</span>
           </h2>
           <DueDate days={5} />
         </header>

@@ -3,13 +3,14 @@ import Card from "../SecondaryCards/SecondaryCards";
 import styles from "./Projects.module.scss";
 
 export default function Projects(props) {
+  console.log(props.projects);
   let cards;
   if (props.projects.length) {
-    cards = props.projects.map((project, index) => (
+    cards = props.projects.map((project) => (
       <Card
-        key={index}
-        title={project.title}
-        days={project.days}
+        key={project.id}
+        title={project.projectName}
+        days={project.dueDate}
         theme={project.theme}
       />
     ));
