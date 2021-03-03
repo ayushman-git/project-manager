@@ -6,20 +6,7 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import Todos from "../Todos/Todos";
 
 export default function ProjectOverviewMain(props) {
-  const [shortcuts] = useState([
-    {
-      title: "Firebase",
-      url:
-        "https://console.firebase.google.com/project/project-manager-dd0f2/overview",
-      image: "https://cdn.worldvectorlogo.com/logos/firebase-1.svg",
-    },
-    {
-      title: "Firebase",
-      url:
-        "https://console.firebase.google.com/project/project-manager-dd0f2/overview",
-      image: "https://cdn.worldvectorlogo.com/logos/firebase-1.svg",
-    },
-  ]);
+  const [shortcuts] = useState(JSON.parse(props.project[0].shortcuts));
   const [todos] = useState([
     { description: "Complete astronomia" },
     { description: "Complete login" },

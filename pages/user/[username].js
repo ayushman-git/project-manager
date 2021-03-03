@@ -38,22 +38,28 @@ export async function getServerSideProps(context) {
     const cookies = nookies.get(context);
     const token = await verifyIdToken(cookies.token);
     const db = firebase.firestore();
-    const projects = [];
-    const snapshot = await db.collection("projects").get();
-    snapshot.forEach((doc) => {
-      if (doc.data().userId === token.uid) {
+
+    const snapshotOfProjects = await db
+      .collection("projects")
+      .where("userId", "==", token.uid)
+      .get();
+
+    const retrieveProjects = () => {
+      const projects = [];
+      snapshotOfProjects.forEach((doc) => {
         projects.push({
           ...doc.data(),
           id: doc.id,
           dueDate: doc.data().dueDate.toDate(),
         });
-      }
-    });
-    console.log(projects);
+      });
+      return projects;
+    };
+
     return {
       props: {
         session: token,
-        projects: JSON.parse(JSON.stringify(projects)),
+        projects: JSON.parse(JSON.stringify(retrieveProjects())),
       },
     };
   } catch (err) {
