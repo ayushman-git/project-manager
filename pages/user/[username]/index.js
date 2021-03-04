@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { verifyIdToken } from "../../auth/firebaseAdmin";
-import firebaseClient from "../../auth/firebaseClient";
+import { verifyIdToken } from "../../../auth/firebaseAdmin";
+import firebaseClient from "../../../auth/firebaseClient";
 import firebase from "firebase";
 import nookies from "nookies";
-import { useRouter } from "next/router";
 
-import Projects from "../../components/Projects/Projects";
-import NavBar from "../../components/Navbar/Navbar";
-import ProjectOverviewMain from "../../components/ProjectOverviewMain/ProjectOverviewMain";
+import Projects from "../../../components/Projects/Projects";
+import NavBar from "../../../components/Navbar/Navbar";
+import ProjectOverviewMain from "../../../components/ProjectOverviewMain/ProjectOverviewMain";
 
 export default function User({ session }) {
   const [projects, setProjects] = useState([]);
 
   let view;
   const db = firebase.firestore();
-  const router = useRouter();
-  const signOut = async () => {
-    await firebase.auth().signOut();
-    router.push("/");
-  };
-
   const getDaysLeft = (firestoreDays) => {
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const today = new Date();
@@ -46,13 +39,14 @@ export default function User({ session }) {
         });
     })();
   }, []);
+
   firebaseClient();
   if (session && projects.length) {
-    console.log(session);
+    const activeProject = projects.find((pr) => pr.active);
     view = (
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <NavBar image={session.picture} />
-        <ProjectOverviewMain project={projects.filter((pr) => pr.active)} />
+        <ProjectOverviewMain project={activeProject} />
         <Projects projects={projects.filter((pr) => !pr.active)} />
       </div>
     );

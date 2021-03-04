@@ -3,7 +3,6 @@ import Shortcut from "./Shortcut/Shortcut";
 import styles from "./Shortcuts.module.scss";
 
 export default function Shortcuts(props) {
-  console.log(props);
   let shortcuts;
   if (props.shortcuts.length) {
     shortcuts = props.shortcuts.map((shortcut, index) => (
