@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import nookies from "nookies";
+import firebase from "firebase";
 import Navbar from "../../../components/Navbar/Navbar";
 import { useRouter } from "next/router";
 
 export default function project({ session }) {
+  const [projectDetail, setProjectDetail] = useState({});
   const router = useRouter();
-  console.log(router);
+  const db = firebase.firestore();
+  console.log(router.query.projectId);
+
+  useEffect(() => {
+    (async () => {
+      db.collection("projects")
+        .where(firebase.firestore.FieldPath.documentId(), "==", session.uid)
+        .onSnapshot((snapshotOfProject) => {
+          console.log(snapshotOfProject);
+          // setProjectDetail(snapshotOfProject[0]);
+        });
+    })();
+  }, []);
+
+  useEffect(() => {
+    console.log(projectDetail);
+  });
   return (
     <div className="maxWidth">
       <Navbar image={session.picture} />

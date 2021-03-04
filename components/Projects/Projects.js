@@ -7,7 +7,7 @@ export default function Projects(props) {
   if (props.projects.length) {
     cards = props.projects.map((project) => (
       <Card
-        key={project.id}
+        key={project.projectId}
         title={project.projectName}
         days={project.dueDate}
         theme={project.theme}
