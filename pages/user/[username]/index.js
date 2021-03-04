@@ -5,7 +5,7 @@ import firebase from "firebase";
 import nookies from "nookies";
 
 import Projects from "../../../components/Projects/Projects";
-import NavBar from "../../../components/Navbar/Navbar";
+import Navbar from "../../../components/Navbar/Navbar";
 import ProjectOverviewMain from "../../../components/ProjectOverviewMain/ProjectOverviewMain";
 
 export default function User({ session }) {
@@ -44,8 +44,8 @@ export default function User({ session }) {
   if (session && projects.length) {
     const activeProject = projects.find((pr) => pr.active);
     view = (
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <NavBar image={session.picture} />
+      <div className="maxWidth">
+        <Navbar image={session.picture} />
         <ProjectOverviewMain project={activeProject} />
         <Projects projects={projects.filter((pr) => !pr.active)} />
       </div>
@@ -60,6 +60,7 @@ export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
     const token = await verifyIdToken(cookies.token);
+    nookies.set(context, "session", JSON.stringify(token), {});
     return {
       props: {
         session: token,

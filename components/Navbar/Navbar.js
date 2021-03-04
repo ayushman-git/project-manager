@@ -6,8 +6,11 @@ import { useRouter } from "next/router";
 
 import clickOutside from "../../hooks/clickOutside";
 
-export default function Navbar(props) {
+import PreviousButton from "../PreviousButton/PreviousButton";
+
+export default function Navbar({ image }) {
   let signout;
+  let goBack;
   const ref = useRef();
   const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -33,17 +36,20 @@ export default function Navbar(props) {
       </div>
     );
   }
+
+  if (router.query?.project) {
+    goBack = <PreviousButton />;
+  }
+
   return (
     <nav className={styles.navWrap}>
-      <strong>LOGO</strong>
+      <strong className={styles.logoNavWrap}>
+        {goBack}
+        <span>LOGO</span>
+      </strong>
       <div ref={ref}>
         <div className={styles.navImgWrap} onClick={toggleSignout}>
-          <Image
-            className={styles.navImg}
-            src={props.image}
-            width={40}
-            height={40}
-          />
+          <Image className={styles.navImg} src={image} width={40} height={40} />
         </div>
         {signout}
       </div>

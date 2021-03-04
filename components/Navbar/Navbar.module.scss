@@ -38,3 +38,12 @@
 .dropdown button:hover {
   background-color: rgb(179, 86, 255, 0.4);
 }
+
+.logoNavWrap {
+  display: flex;
+  align-items: center;
+}
+
+.logoNavWrap *:last-child {
+  margin-left: 0.4rem;
+}
