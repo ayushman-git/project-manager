@@ -6,23 +6,27 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import Todos from "../Todos/Todos";
 
 export default function ProjectOverviewMain(props) {
-  const [shortcuts] = useState(JSON.parse(props.project[0].shortcuts));
   const [todos] = useState([
     { description: "Complete astronomia" },
     { description: "Complete login" },
     { description: "Update leveling" },
   ]);
   return (
-    <section className={styles.projectCard}>
+    <section
+      className={styles.projectCard}
+      style={{
+        background: `linear-gradient(-45deg, ${props.project[0].theme[0]}, ${props.project[0].theme[1]})`,
+      }}
+    >
       <article className={styles.leftBar}>
         <header className={styles.cardHeader}>
           <h2>
             {props.project[0].projectName}
             <span className={styles.tag}>#{props.project[0].tag}</span>
           </h2>
-          <DueDate days={5} />
+          <DueDate days={props.project[0].dueDate} />
         </header>
-        <Shortcuts shortcuts={shortcuts} />
+        <Shortcuts shortcuts={JSON.parse(props.project[0].shortcuts)} />
         <ProgressBar storiesDone={20} totalStories={40} />
       </article>
       <article className={styles.rightBar}>
