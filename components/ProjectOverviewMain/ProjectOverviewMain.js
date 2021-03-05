@@ -21,7 +21,7 @@ const ProjectOverviewMain = (props) => {
         pathname: `${router.asPath}/${props.project.projectName.toLowerCase()}`,
         query: { projectId: props.project.projectId },
       }}
-      as={`${router.asPath}/${props.project.projectName.toLowerCase()}`}
+      // as={`${router.asPath}/${props.project.projectName.toLowerCase()}`}
     >
       <section
         className={styles.projectCard}

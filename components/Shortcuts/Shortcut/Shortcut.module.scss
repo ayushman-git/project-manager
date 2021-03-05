@@ -1,5 +1,5 @@
 .shortcutWrap {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 0.6rem;
   border-radius: 50%;
   width: 1.6rem;
@@ -11,6 +11,6 @@
 }
 
 .shortcutWrap:hover {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.4);
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }

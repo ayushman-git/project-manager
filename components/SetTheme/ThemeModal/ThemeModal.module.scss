@@ -1,0 +1,26 @@
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50px;
+  background-color: rgb(98, 98, 255);
+  color: white;
+  padding: 2rem;
+  z-index: 5;
+}
+
+.gradientsWrap {
+  display: flex;
+  gap: 2rem;
+}
+
+.back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 4;
+}

@@ -43,7 +43,6 @@ export default function User({ session }) {
   firebaseClient();
   if (session && projects.length) {
     const activeProject = projects.find((pr) => pr.active);
-    console.log(activeProject);
     view = (
       <div className="maxWidth">
         <Navbar image={session.picture} />
