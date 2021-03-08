@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import nookies from "nookies";
+import { verifyIdToken } from "../../../auth/firebaseAdmin";
 import firebase from "firebase";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -12,12 +13,14 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import DueDate from "../../../../components/DueDate/DueDate";
 import Shortcuts from "../../../../components/Shortcuts/Shortcuts";
 import Modal from "../../../../components/Modal/Modal";
+import EditProjectModal from "../../../../components/AddProjectModal/AddProjectModal";
 
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
   const [shortcutUrl, setShortcutUrl] = useState("");
   const [platform, setPlatform] = useState("other");
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
+  const [toggleEdit, setToggleEdit] = useState(false);
 
   const router = useRouter();
   const db = firebase.firestore();
@@ -38,7 +41,7 @@ export default function project({ session }) {
             if (d.data()) {
               project = {
                 ...d.data(),
-                dueDate: useDaysLeft(d.data().dueDate.toDate()),
+                dueDate: useDaysLeft(d.data().dueDate),
               };
               setProjectDetail(project);
             }
@@ -66,11 +69,7 @@ export default function project({ session }) {
 
   if (toggleAddShortcut) {
     addShortcutModal = (
-      <Modal
-        projectDetail={projectDetail}
-        session={session}
-        closeModal={() => setToggleAddShortcut(false)}
-      >
+      <Modal closeModal={() => setToggleAddShortcut(false)}>
         <header>
           <h3>Add Shortcut</h3>
         </header>
@@ -160,9 +159,9 @@ export default function project({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
-    const session = cookies.session;
+    const token = await verifyIdToken(cookies.token);
     return {
-      props: { session: JSON.parse(session) },
+      props: { session: token },
     };
   } catch (err) {
     console.log(err);

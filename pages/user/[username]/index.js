@@ -4,23 +4,28 @@ import firebaseClient from "../../../auth/firebaseClient";
 import firebase from "firebase";
 import nookies from "nookies";
 
+import useDaysLeft from "../../../hooks/useDaysLeft";
 import Projects from "../../../components/Projects/Projects";
 import Navbar from "../../../components/Navbar/Navbar";
 import ProjectOverviewMain from "../../../components/ProjectOverviewMain/ProjectOverviewMain";
+import AddProjectFAB from "../../../components/AddProjectFAB/AddProjectFAB";
+import AddProjectModal from "../../../components/AddProjectModal/AddProjectModal";
 
 export default function User({ session }) {
   const [projects, setProjects] = useState([]);
+  const [showAddProjectModal, setShowAddProjectModal] = useState(false);
 
-  let view;
+  let view, addProjectModal;
   const db = firebase.firestore();
-  const getDaysLeft = (firestoreDays) => {
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    const today = new Date();
-    const diffDays = Math.round(
-      Math.abs((today - new Date(firestoreDays)) / oneDay)
+
+  if (showAddProjectModal) {
+    addProjectModal = (
+      <AddProjectModal
+        closeModal={() => setShowAddProjectModal(false)}
+        session={session}
+      />
     );
-    return diffDays;
-  };
+  }
 
   useEffect(() => {
     (async () => {
@@ -32,7 +37,7 @@ export default function User({ session }) {
             projects.push({
               ...doc.data(),
               projectId: doc.id,
-              dueDate: getDaysLeft(doc.data().dueDate.toDate()),
+              dueDate: useDaysLeft(doc.data().dueDate),
             });
           });
           setProjects(projects);
@@ -48,6 +53,8 @@ export default function User({ session }) {
         <Navbar image={session.picture} />
         <ProjectOverviewMain project={activeProject} />
         <Projects projects={projects.filter((pr) => !pr.active)} />
+        <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
+        {addProjectModal}
       </div>
     );
   } else {
@@ -58,9 +65,9 @@ export default function User({ session }) {
 
 export async function getServerSideProps(context) {
   try {
+    console.log(context);
     const cookies = nookies.get(context);
     const token = await verifyIdToken(cookies.token);
-    nookies.set(context, "session", JSON.stringify(token), {});
     return {
       props: {
         session: token,
@@ -71,7 +78,7 @@ export async function getServerSideProps(context) {
     context.res.writeHead(302, { location: "/" });
     context.res.end();
     return {
-      props: null,
+      props: { session: null },
     };
   }
 }
