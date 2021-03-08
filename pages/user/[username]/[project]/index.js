@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import nookies from "nookies";
-import { verifyIdToken } from "../../../auth/firebaseAdmin";
+import { verifyIdToken } from "../../../../auth/firebaseAdmin";
 import firebase from "firebase";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -57,7 +57,9 @@ export default function project({ session }) {
       .get()
       .then((query) => {
         const pr = query.docs[0];
-        const prevShortcutsJson = JSON.parse(projectDetail.shortcuts);
+        const prevShortcutsJson = projectDetail.shortcuts
+          ? JSON.parse(projectDetail.shortcuts)
+          : [];
         pr.ref.update({
           shortcuts: JSON.stringify([
             ...prevShortcutsJson,
@@ -65,6 +67,7 @@ export default function project({ session }) {
           ]),
         });
       });
+    setToggleAddShortcut(false);
   };
 
   if (toggleAddShortcut) {
@@ -107,7 +110,11 @@ export default function project({ session }) {
           <div className={styles.titleWithAddOns}>
             <h1>{projectDetail.projectName}</h1>
             <span className={styles.tag}>#{projectDetail.tag}</span>
-            <DueDate days={projectDetail.dueDate} className={styles.dueDate} />
+            <DueDate
+              days={projectDetail.dueDate}
+              projectId={projectId}
+              className={styles.dueDate}
+            />
           </div>
 
           <SetTheme
@@ -119,7 +126,9 @@ export default function project({ session }) {
         </header>
         <section className={styles.info}>
           <section className={styles.shortcutsWrap}>
-            <Shortcuts shortcuts={JSON.parse(projectDetail.shortcuts)} />
+            {projectDetail.shortcuts && (
+              <Shortcuts shortcuts={JSON.parse(projectDetail.shortcuts)} />
+            )}
 
             <Image
               src="/images/plus.svg"

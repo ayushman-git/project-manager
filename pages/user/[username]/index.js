@@ -26,7 +26,8 @@ export default function User({ session }) {
       />
     );
   }
-
+  // console.log(firebase.auth().currentUser);
+  // console.log(session);
   useEffect(() => {
     (async () => {
       db.collection("projects")
@@ -65,7 +66,6 @@ export default function User({ session }) {
 
 export async function getServerSideProps(context) {
   try {
-    console.log(context);
     const cookies = nookies.get(context);
     const token = await verifyIdToken(cookies.token);
     return {
