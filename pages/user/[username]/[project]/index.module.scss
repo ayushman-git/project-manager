@@ -30,6 +30,8 @@
 .shortcutsWrap {
   display: flex;
   gap: 1rem;
+  width: max-content;
+  position: relative;
 }
 
 .info {
@@ -42,5 +44,21 @@
 .description {
   width: 70ch;
   font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6rem;
+}
+.addUrl {
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  padding: 0 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.addUrl::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.addShortcut {
+  cursor: pointer;
 }

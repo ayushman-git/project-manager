@@ -1,11 +1,15 @@
 import firebase from "firebase";
 import { useState } from "react";
 
+import theme from "../../assets/theme";
+import Gradient from "../Gradient/Gradient";
+
 import styles from "./SetTheme.module.scss";
-import ThemeModal from "./ThemeModal/ThemeModal";
+import Modal from "../Modal/Modal";
 
 const SetTheme = ({ currentTheme, projectId }) => {
   let modal;
+
   const [showModal, setShowModal] = useState(false);
   const db = firebase.firestore();
   const toggleModal = () => {
@@ -21,13 +25,19 @@ const SetTheme = ({ currentTheme, projectId }) => {
       });
     toggleModal();
   };
+
+  const gradients = theme.map((th, index) => (
+    <Gradient theme={th} key={index} changeTheme={changeTheme} />
+  ));
+
   if (showModal) {
     modal = (
-      <ThemeModal
-        currentTheme={currentTheme}
-        changeTheme={changeTheme}
-        closeModal={toggleModal}
-      />
+      <Modal currentTheme={currentTheme} closeModal={toggleModal}>
+        <header>
+          <h2>Pick a theme</h2>
+        </header>
+        <section className={styles.gradientsWrap}>{gradients}</section>
+      </Modal>
     );
   }
   return (
