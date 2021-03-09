@@ -1,3 +1,7 @@
+.wrap {
+  min-height: 100vh;
+}
+
 .projectWrap {
   margin-top: 2rem;
 }
@@ -15,16 +19,17 @@
 .tag {
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.6);
+  margin-right: 1.4rem;
+}
+
+.tag > span {
+  margin: 0;
 }
 
 .titleWithAddOns {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-}
-
-.titleWithAddOns *:last-child {
-  margin-left: 1rem;
 }
 
 .shortcutsWrap {
@@ -38,7 +43,7 @@
   display: flex;
   flex-flow: column nowrap;
   gap: 1.4rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .description {

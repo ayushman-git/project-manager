@@ -23,6 +23,8 @@ export default function project({ session }) {
   const [toggleEdit, setToggleEdit] = useState(false);
 
   const descriptionRef = useRef();
+  const titleRef = useRef();
+  const tagRef = useRef();
 
   const router = useRouter();
   const db = firebase.firestore();
@@ -30,45 +32,47 @@ export default function project({ session }) {
   let projectView = <h1>Loading...</h1>;
   let addShortcutModal;
 
-  const changeDescription = (e) => {
-    const newDescription = e.currentTarget.textContent;
+  const updateFirestore = (e, ref, field) => {
+    const newData = e.currentTarget.textContent;
     db.collection("projects")
       .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
       .get()
       .then((query) => {
         const pr = query.docs[0];
         pr.ref.update({
-          description: newDescription,
+          [field]: newData,
         });
       });
-    descriptionRef.current.contentEditable = false;
+    ref.current.contentEditable = false;
   };
 
-  const makeEditable = () => {
-    descriptionRef.current.contentEditable = true;
-    descriptionRef.current.focus();
+  const makeEditable = (e, ref) => {
+    ref.current.contentEditable = true;
+    ref.current.focus();
   };
 
   useEffect(() => {
+    let cancelled = false;
     if (router.query?.projectId) {
       localStorage.setItem("projectId", projectId);
     }
-    (async () => {
-      db.collection("projects")
-        .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-        .onSnapshot((doc) => {
-          let project = {};
-          doc.forEach((d) => {
-            if (d.data()) {
-              project = {
-                ...d.data(),
-                dueDate: useDaysLeft(d.data().dueDate),
-              };
-              setProjectDetail(project);
-            }
-          });
+    db.collection("projects")
+      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+      .onSnapshot((doc) => {
+        let project = {};
+        doc.forEach((d) => {
+          if (d.data()) {
+            project = {
+              ...d.data(),
+              dueDate: useDaysLeft(d.data().dueDate),
+            };
+            if (!cancelled) setProjectDetail(project);
+          }
         });
-    })();
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const updateShortcuts = (e) => {
@@ -129,8 +133,23 @@ export default function project({ session }) {
       <section className={styles.projectWrap}>
         <header className={styles.header}>
           <div className={styles.titleWithAddOns}>
-            <h1>{projectDetail.projectName}</h1>
-            <span className={styles.tag}>#{projectDetail.tag}</span>
+            <h1
+              ref={titleRef}
+              onDoubleClick={(e) => makeEditable(e, titleRef)}
+              onBlur={(e) => updateFirestore(e, titleRef, "projectName")}
+            >
+              {projectDetail.projectName}
+            </h1>
+            <span className={styles.tag}>
+              #
+              <span
+                ref={tagRef}
+                onBlur={(e) => updateFirestore(e, tagRef, "tag")}
+                onDoubleClick={(e) => makeEditable(e, tagRef)}
+              >
+                {projectDetail.tag}
+              </span>
+            </span>
             <DueDate
               days={projectDetail.dueDate}
               projectId={projectId}
@@ -160,10 +179,10 @@ export default function project({ session }) {
             />
           </section>
           <div
-            ref={descriptionRef}
             className={styles.description}
-            onBlur={changeDescription}
-            onDoubleClick={makeEditable}
+            ref={descriptionRef}
+            onBlur={(e) => updateFirestore(e, descriptionRef, "description")}
+            onDoubleClick={(e) => makeEditable(e, descriptionRef)}
           >
             {projectDetail.description}
           </div>
@@ -175,6 +194,7 @@ export default function project({ session }) {
 
   return (
     <div
+      className={styles.wrap}
       style={
         Object.keys(projectDetail).length > 0
           ? {
