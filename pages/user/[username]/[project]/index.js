@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import nookies from "nookies";
 import { verifyIdToken } from "../../../../auth/firebaseAdmin";
 import firebase from "firebase";
@@ -22,11 +22,32 @@ export default function project({ session }) {
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
   const [toggleEdit, setToggleEdit] = useState(false);
 
+  const descriptionRef = useRef();
+
   const router = useRouter();
   const db = firebase.firestore();
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <h1>Loading...</h1>;
   let addShortcutModal;
+
+  const changeDescription = (e) => {
+    const newDescription = e.currentTarget.textContent;
+    db.collection("projects")
+      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+      .get()
+      .then((query) => {
+        const pr = query.docs[0];
+        pr.ref.update({
+          description: newDescription,
+        });
+      });
+    descriptionRef.current.contentEditable = false;
+  };
+
+  const makeEditable = () => {
+    descriptionRef.current.contentEditable = true;
+    descriptionRef.current.focus();
+  };
 
   useEffect(() => {
     if (router.query?.projectId) {
@@ -138,9 +159,14 @@ export default function project({ session }) {
               onClick={() => setToggleAddShortcut(true)}
             />
           </section>
-          <article className={styles.description}>
+          <div
+            ref={descriptionRef}
+            className={styles.description}
+            onBlur={changeDescription}
+            onDoubleClick={makeEditable}
+          >
             {projectDetail.description}
-          </article>
+          </div>
         </section>
         {addShortcutModal}
       </section>

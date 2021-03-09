@@ -10,7 +10,7 @@ export default function Shortcut(props) {
       noopener="noopener"
       className={styles.shortcutWrap}
     >
-      <Image src={props.image} width={30} height={30} />
+      <Image src={props.image} width={30} height={25} />
     </a>
   );
 }

@@ -27,7 +27,7 @@ export default function DueDate({ days, projectId }) {
       >
         {days} Days Left
       </div>
-      {showInput && projectId && <input type="date" onChange={changeDate} />}
+      {showInput && projectId && <input type="date" onBlur={changeDate} />}
     </div>
   );
 }
