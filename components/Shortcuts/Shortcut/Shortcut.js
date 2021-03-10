@@ -2,15 +2,22 @@ import React from "react";
 import Image from "next/image";
 import styles from "./Shortcut.module.scss";
 
-export default function Shortcut(props) {
+export default function Shortcut({ url, image, delShortcut, id }) {
+  const handleClick = () => {
+    window.open(url, "_blank", "noopener");
+  };
+  const mouseDownHandler = (e) => {
+    if (e.button === 1 && delShortcut) {
+      delShortcut(e, id);
+    }
+  };
   return (
-    <a
-      href={props.url}
-      target="_blank"
-      noopener="noopener"
-      className={styles.shortcutWrap}
+    <div
+      onClick={handleClick}
+      onMouseDown={mouseDownHandler}
+      className={`${styles.shortcutWrap} shortcutDiv`}
     >
-      <Image src={props.image} width={30} height={25} />
-    </a>
+      <Image src={image} width={30} height={25} />
+    </div>
   );
 }

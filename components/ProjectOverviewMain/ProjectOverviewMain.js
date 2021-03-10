@@ -16,7 +16,6 @@ const ProjectOverviewMain = (props) => {
   const router = useRouter();
   const handleOverciewClick = (e) => {
     if (e.target.nodeName !== "IMG") {
-      console.log("d");
       router.push({
         pathname: `${router.asPath}/${props.project.projectName.toLowerCase()}`,
         query: { projectId: props.project.projectId },
@@ -40,7 +39,9 @@ const ProjectOverviewMain = (props) => {
           </h2>
           <DueDate days={props.project.dueDate} />
         </header>
-        <Shortcuts shortcuts={JSON.parse(props.project.shortcuts)} />
+        {props.project?.shortcuts && (
+          <Shortcuts shortcuts={props.project.shortcuts} />
+        )}
         <ProgressBar storiesDone={20} totalStories={40} />
       </article>
       <article className={styles.rightBar}>

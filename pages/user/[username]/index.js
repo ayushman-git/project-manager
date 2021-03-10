@@ -26,8 +26,6 @@ export default function User({ session }) {
       />
     );
   }
-  // console.log(firebase.auth().currentUser);
-  // console.log(session);
   useEffect(() => {
     (async () => {
       db.collection("projects")
@@ -57,6 +55,14 @@ export default function User({ session }) {
         <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
         {addProjectModal}
       </div>
+    );
+  } else if (session) {
+    view = (
+      <>
+        <h1>Add Project</h1>
+        <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
+        {addProjectModal}
+      </>
     );
   } else {
     view = <h1>Loading...</h1>;

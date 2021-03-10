@@ -5,11 +5,13 @@ import styles from "./Shortcuts.module.scss";
 export default function Shortcuts(props) {
   let shortcuts;
   if (props.shortcuts.length) {
-    shortcuts = props.shortcuts.map((shortcut, index) => (
+    shortcuts = props.shortcuts.map((shortcut) => (
       <Shortcut
-        key={index}
+        key={shortcut.id}
+        id={shortcut.id}
         title={shortcut.platform}
         url={shortcut.url}
+        delShortcut={props.delShortcut}
         image={`/images/${shortcut.platform}.svg`}
       />
     ));

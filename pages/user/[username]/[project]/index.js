@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
 import nookies from "nookies";
 import { verifyIdToken } from "../../../../auth/firebaseAdmin";
 import firebase from "firebase";
@@ -28,6 +29,7 @@ export default function project({ session }) {
 
   const router = useRouter();
   const db = firebase.firestore();
+
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <h1>Loading...</h1>;
   let addShortcutModal;
@@ -82,17 +84,38 @@ export default function project({ session }) {
       .get()
       .then((query) => {
         const pr = query.docs[0];
-        const prevShortcutsJson = projectDetail.shortcuts
-          ? JSON.parse(projectDetail.shortcuts)
-          : [];
+        if (projectDetail.shortcuts) {
+          pr.ref.update({
+            shortcuts: [
+              ...projectDetail.shortcuts,
+              { platform, url: shortcutUrl, id: uuidv4() },
+            ],
+          });
+        } else {
+          pr.ref.update({
+            shortcuts: [{ platform, url: shortcutUrl, id: uuidv4() }],
+          });
+        }
+      });
+    setPlatform("other");
+    setShortcutUrl("");
+    setToggleAddShortcut(false);
+  };
+
+  const delShortcutHandler = (e, id) => {
+    const updatedShortcuts = projectDetail.shortcuts.filter(
+      (project) => project.id !== id
+    );
+
+    db.collection("projects")
+      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+      .get()
+      .then((query) => {
+        const pr = query.docs[0];
         pr.ref.update({
-          shortcuts: JSON.stringify([
-            ...prevShortcutsJson,
-            { platform, url: shortcutUrl },
-          ]),
+          shortcuts: updatedShortcuts,
         });
       });
-    setToggleAddShortcut(false);
   };
 
   if (toggleAddShortcut) {
@@ -167,7 +190,10 @@ export default function project({ session }) {
         <section className={styles.info}>
           <section className={styles.shortcutsWrap}>
             {projectDetail.shortcuts && (
-              <Shortcuts shortcuts={JSON.parse(projectDetail.shortcuts)} />
+              <Shortcuts
+                shortcuts={projectDetail.shortcuts}
+                delShortcut={delShortcutHandler}
+              />
             )}
 
             <Image
