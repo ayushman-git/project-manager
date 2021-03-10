@@ -5,7 +5,7 @@ import firebase from "firebase";
 import theme from "../../assets/theme";
 
 import Modal from "../Modal/Modal";
-export default function AddProjectModal({ session, closeModal }) {
+export default function AddProjectModal({ session, closeModal, empty }) {
   const [projectName, setProjectName] = useState("");
   const [tag, setTag] = useState("");
   const [description, setDescription] = useState("");
@@ -31,6 +31,7 @@ export default function AddProjectModal({ session, closeModal }) {
         tag,
         theme: theme[Math.floor(Math.random() * theme.length)],
         userId: session.uid,
+        active: empty ? true : false,
       });
     closeModal();
     reset();

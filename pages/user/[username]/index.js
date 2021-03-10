@@ -14,7 +14,6 @@ import AddProjectModal from "../../../components/AddProjectModal/AddProjectModal
 export default function User({ session }) {
   const [projects, setProjects] = useState([]);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
-
   let view, addProjectModal;
   const db = firebase.firestore();
 
@@ -23,6 +22,7 @@ export default function User({ session }) {
       <AddProjectModal
         closeModal={() => setShowAddProjectModal(false)}
         session={session}
+        empty={projects.length ? true : false}
       />
     );
   }
@@ -59,9 +59,12 @@ export default function User({ session }) {
   } else if (session) {
     view = (
       <>
-        <h1>Add Project</h1>
-        <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
-        {addProjectModal}
+        <div className="maxWidth">
+          <Navbar image={session.picture} />
+          <h1>Add Projects</h1>
+          <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
+          {addProjectModal}
+        </div>
       </>
     );
   } else {
