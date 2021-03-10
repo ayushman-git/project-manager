@@ -231,7 +231,7 @@ export default function project({ session }) {
       <div className="maxWidth">
         <Navbar image={session.picture} />
         {projectView}
-        <ScrumBoard />
+        <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
       </div>
     </div>
   );
