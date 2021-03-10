@@ -14,8 +14,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import DueDate from "../../../../components/DueDate/DueDate";
 import Shortcuts from "../../../../components/Shortcuts/Shortcuts";
 import Modal from "../../../../components/Modal/Modal";
-import EditProjectModal from "../../../../components/AddProjectModal/AddProjectModal";
-
+import ScrumBoard from "../../../../components/ScrumBoard/ScrumBoard";
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
   const [shortcutUrl, setShortcutUrl] = useState("");
@@ -232,6 +231,7 @@ export default function project({ session }) {
       <div className="maxWidth">
         <Navbar image={session.picture} />
         {projectView}
+        <ScrumBoard />
       </div>
     </div>
   );
