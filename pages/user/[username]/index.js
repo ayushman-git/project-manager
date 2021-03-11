@@ -16,13 +16,12 @@ export default function User({ session }) {
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
   let view, addProjectModal;
   const db = firebase.firestore();
-
   if (showAddProjectModal) {
     addProjectModal = (
       <AddProjectModal
         closeModal={() => setShowAddProjectModal(false)}
         session={session}
-        empty={projects.length ? true : false}
+        empty={projects.length ? false : true}
       />
     );
   }

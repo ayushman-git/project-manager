@@ -6,8 +6,8 @@ const AddProjectFAB = ({ FABClicked }) => {
     <div className={styles.FABWrap} onClick={FABClicked}>
       <Image
         src="/images/plus.svg"
-        width={50}
-        height={50}
+        width={40}
+        height={40}
         layout="responsive"
       />
     </div>
