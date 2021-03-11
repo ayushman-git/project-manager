@@ -7,7 +7,7 @@ const StoryCard = ({ story, selectedStory }) => {
     selectedStory(e, story.id);
   };
   return (
-    <section className={styles.card}>
+    <section className={`${styles.storyCard} card`}>
       <article>
         <p>{story.description}</p>
       </article>

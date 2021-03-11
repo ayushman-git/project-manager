@@ -16,6 +16,11 @@ const ScrumBoard = ({ stories, projectId }) => {
     setSelectedStoryId(storyId);
     setToggleTaskModal(true);
   };
+
+  const changeTaskStatus = (id, type, direction) => {
+    console.log(id, type, direction);
+  };
+
   if (stories) {
     rows = stories.map((story) => (
       <tr key={story.id}>
@@ -26,18 +31,21 @@ const ScrumBoard = ({ stories, projectId }) => {
           <Tasks
             tasks={story.tasks.filter((task) => task.type === "idle")}
             type="idle"
+            changeStatusClick={changeTaskStatus}
           />
         </td>
         <td>
           <Tasks
             tasks={story.tasks.filter((task) => task.type === "doing")}
             type="doing"
+            changeStatusClick={changeTaskStatus}
           />
         </td>
         <td>
           <Tasks
             tasks={story.tasks.filter((task) => task.type === "done")}
             type="done"
+            changeStatusClick={changeTaskStatus}
           />
         </td>
       </tr>

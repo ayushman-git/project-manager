@@ -1,0 +1,13 @@
+.cardList {
+  list-style-type: none;
+}
+
+.taskCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.taskCard img {
+  cursor: pointer;
+}

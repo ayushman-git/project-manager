@@ -2,3 +2,19 @@
   margin: 0 auto;
   max-width: 1200px;
 }
+
+.card {
+  border-radius: 30px;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.2)
+  );
+  color: white;
+  padding: 0.1rem 2rem;
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6rem;
+  margin: 0.4rem 0;
+}
