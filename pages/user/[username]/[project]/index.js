@@ -20,14 +20,13 @@ export default function project({ session }) {
   const [shortcutUrl, setShortcutUrl] = useState("");
   const [platform, setPlatform] = useState("other");
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
-  const [toggleEdit, setToggleEdit] = useState(false);
+
+  const router = useRouter();
+  const db = firebase.firestore();
 
   const descriptionRef = useRef();
   const titleRef = useRef();
   const tagRef = useRef();
-
-  const router = useRouter();
-  const db = firebase.firestore();
 
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <h1>Loading...</h1>;
@@ -117,6 +116,28 @@ export default function project({ session }) {
       });
   };
 
+  const changeActiveStatus = async () => {
+    if (projectDetail.active) {
+      return;
+    }
+
+    let query = firebase.firestore().collection("projects");
+    query = query.where("userId", "==", session.uid);
+    query = query.where("active", "==", true);
+
+    const docs = await Promise.all([
+      query.get(),
+      db
+        .collection("projects")
+        .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+        .get(),
+    ]);
+    const alreadyActive = docs[0];
+    const toBeActive = docs[1];
+    alreadyActive.docs[0].ref.update({ active: false });
+    toBeActive.docs[0].ref.update({ active: true });
+  };
+
   if (toggleAddShortcut) {
     addShortcutModal = (
       <Modal closeModal={() => setToggleAddShortcut(false)}>
@@ -178,13 +199,24 @@ export default function project({ session }) {
               className={styles.dueDate}
             />
           </div>
-
-          <SetTheme
-            currentTheme={projectDetail.theme}
-            projectId={
-              router.query.projectId || localStorage.getItem("projectId")
-            }
-          />
+          <div className={styles.headerRight}>
+            <Image
+              src={
+                projectDetail.active
+                  ? "/images/star-fill.svg"
+                  : "/images/star.svg"
+              }
+              width={20}
+              height={20}
+              onClick={changeActiveStatus}
+            />
+            <SetTheme
+              currentTheme={projectDetail.theme}
+              projectId={
+                router.query.projectId || localStorage.getItem("projectId")
+              }
+            />
+          </div>
         </header>
         <section className={styles.info}>
           <section className={styles.shortcutsWrap}>

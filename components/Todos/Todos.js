@@ -6,7 +6,7 @@ export default function Todos(props) {
   if (props.todos.length) {
     todos = props.todos.map((todo, index) => (
       <li className={styles.todo} key={index}>
-        {todo.description}
+        {todo}
       </li>
     ));
   }
