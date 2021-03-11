@@ -1,4 +1,5 @@
 import { useState } from "react";
+import firebase from "firebase";
 import Image from "next/image";
 import styles from "./ScrumBoard.module.scss";
 
@@ -8,6 +9,7 @@ import StoryCard from "./StoryCard/StoryCard";
 import Tasks from "./Tasks/Tasks";
 
 const ScrumBoard = ({ stories, projectId }) => {
+  const db = firebase.firestore();
   const [toggleStoryModal, setToggleStoryModal] = useState(false);
   const [selectedStoryId, setSelectedStoryId] = useState("");
   const [toggleTaskModal, setToggleTaskModal] = useState(false);
@@ -17,8 +19,39 @@ const ScrumBoard = ({ stories, projectId }) => {
     setToggleTaskModal(true);
   };
 
-  const changeTaskStatus = (id, type, direction) => {
-    console.log(id, type, direction);
+  const updateFirestoreWithUpdatedTasks = (updatedStory) => {
+    db.collection("projects")
+      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+      .get()
+      .then((query) => {
+        const pr = query.docs[0];
+        pr.ref.update({
+          stories: updatedStory,
+        });
+      });
+  };
+
+  const changeTaskStatus = (taskId, storyId, type, direction) => {
+    const selectedStoryIndex = stories.findIndex(
+      (story) => story.id === storyId
+    );
+    const selectedStory = stories.find((story) => story.id === storyId);
+    const selectedTaskIndex = selectedStory.tasks.findIndex(
+      (task) => task.id === taskId
+    );
+
+    if (type === "idle" && direction === "right")
+      selectedStory.tasks[selectedTaskIndex].type = "doing";
+    else if (type === "doing" && direction === "left")
+      selectedStory.tasks[selectedTaskIndex].type = "idle";
+    else if (type === "doing" && direction === "right")
+      selectedStory.tasks[selectedTaskIndex].type = "done";
+    else if (type === "done" && direction === "left")
+      selectedStory.tasks[selectedTaskIndex].type = "doing";
+
+    const updatedStory = stories;
+    updatedStory[selectedStoryIndex] = selectedStory;
+    updateFirestoreWithUpdatedTasks(updatedStory);
   };
 
   if (stories) {
@@ -30,6 +63,7 @@ const ScrumBoard = ({ stories, projectId }) => {
         <td>
           <Tasks
             tasks={story.tasks.filter((task) => task.type === "idle")}
+            storyId={story.id}
             type="idle"
             changeStatusClick={changeTaskStatus}
           />
@@ -37,6 +71,7 @@ const ScrumBoard = ({ stories, projectId }) => {
         <td>
           <Tasks
             tasks={story.tasks.filter((task) => task.type === "doing")}
+            storyId={story.id}
             type="doing"
             changeStatusClick={changeTaskStatus}
           />
@@ -44,6 +79,7 @@ const ScrumBoard = ({ stories, projectId }) => {
         <td>
           <Tasks
             tasks={story.tasks.filter((task) => task.type === "done")}
+            storyId={story.id}
             type="done"
             changeStatusClick={changeTaskStatus}
           />

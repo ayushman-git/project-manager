@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import styles from "./Tasks.module.scss";
 
-const Tasks = ({ tasks, type, changeStatusClick }) => {
+const Tasks = ({ tasks, type, changeStatusClick, storyId }) => {
   const showLeftArrow = type === "doing" || type === "done";
   const showRightArrow = type === "doing" || type === "idle";
   let displayTasks;
@@ -11,7 +11,7 @@ const Tasks = ({ tasks, type, changeStatusClick }) => {
       <li key={task.id} className={`${styles.taskCard} card`}>
         {showLeftArrow && (
           <Image
-            onClick={() => changeStatusClick(task.id, type, "leftArrow")}
+            onClick={() => changeStatusClick(task.id, storyId, type, "left")}
             src="/images/left.svg"
             width={25}
             height={25}
@@ -20,7 +20,7 @@ const Tasks = ({ tasks, type, changeStatusClick }) => {
         <p>{task.task}</p>
         {showRightArrow && (
           <Image
-            onClick={() => changeStatusClick(task.id, type, "rightArrow")}
+            onClick={() => changeStatusClick(task.id, storyId, type, "right")}
             src="/images/right.svg"
             width={25}
             height={25}
