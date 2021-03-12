@@ -13,6 +13,7 @@ import AddProjectModal from "../../../components/AddProjectModal/AddProjectModal
 
 export default function User({ session }) {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
   let view, addProjectModal;
   const db = firebase.firestore();
@@ -20,6 +21,7 @@ export default function User({ session }) {
 
   useEffect(() => {
     let cancelled = false;
+    setLoading(true);
     (async () => {
       db.collection("projects")
         .where("userId", "==", session.uid)
@@ -34,6 +36,7 @@ export default function User({ session }) {
           });
           if (!cancelled) {
             setProjects(projects);
+            setLoading(false);
           }
         });
     })();
@@ -59,11 +62,13 @@ export default function User({ session }) {
         {inActiveProjects && <Projects projects={inActiveProjects} />}
       </div>
     );
+  } else if (loading) {
+    view = <h1>Loading...</h1>;
   }
   return (
     <main className="maxWidth">
       <Navbar image={session.picture} />
-      {!projects.length && <h1>Add projects</h1>}
+      {!projects.length && !loading && <h1>Add projects</h1>}
       {view}
       <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
       {addProjectModal}
