@@ -16,16 +16,10 @@ export default function User({ session }) {
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
   let view, addProjectModal;
   const db = firebase.firestore();
-  if (showAddProjectModal) {
-    addProjectModal = (
-      <AddProjectModal
-        closeModal={() => setShowAddProjectModal(false)}
-        session={session}
-        empty={projects.length ? false : true}
-      />
-    );
-  }
+  firebaseClient();
+
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       db.collection("projects")
         .where("userId", "==", session.uid)
@@ -38,38 +32,43 @@ export default function User({ session }) {
               dueDate: useDaysLeft(doc.data().dueDate),
             });
           });
-          setProjects(projects);
+          if (!cancelled) {
+            setProjects(projects);
+          }
         });
     })();
+    return () => (cancelled = true);
   }, []);
 
-  firebaseClient();
+  if (showAddProjectModal) {
+    addProjectModal = (
+      <AddProjectModal
+        closeModal={() => setShowAddProjectModal(false)}
+        session={session}
+        empty={projects.length ? false : true}
+      />
+    );
+  }
+
   if (session && projects.length) {
     const activeProject = projects.find((pr) => pr.active);
+    const inActiveProjects = projects.filter((pr) => !pr.active);
     view = (
-      <div className="maxWidth">
-        <Navbar image={session.picture} />
+      <div>
         <ProjectOverviewMain project={activeProject} />
-        <Projects projects={projects.filter((pr) => !pr.active)} />
-        <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
-        {addProjectModal}
+        {inActiveProjects && <Projects projects={inActiveProjects} />}
       </div>
     );
-  } else if (session) {
-    view = (
-      <>
-        <div className="maxWidth">
-          <Navbar image={session.picture} />
-          <h1>Add Projects</h1>
-          <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
-          {addProjectModal}
-        </div>
-      </>
-    );
-  } else {
-    view = <h1>Loading...</h1>;
   }
-  return <main>{view}</main>;
+  return (
+    <main className="maxWidth">
+      <Navbar image={session.picture} />
+      {!projects.length && <h1>Add projects</h1>}
+      {view}
+      <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
+      {addProjectModal}
+    </main>
+  );
 }
 
 export async function getServerSideProps(context) {

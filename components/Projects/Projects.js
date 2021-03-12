@@ -6,18 +6,8 @@ import styles from "./Projects.module.scss";
 export default function Projects(props) {
   const projectRef = useRef();
   let cards;
-  if (props.projects.length) {
-    cards = props.projects.map((project) => (
-      <Card
-        key={project.projectId}
-        title={project.projectName}
-        days={project.dueDate}
-        theme={project.theme}
-        projectName={project.projectName}
-        projectId={project.projectId}
-      />
-    ));
-    useEffect(() => {
+  useEffect(() => {
+    if (props.projects.length) {
       (function () {
         function scrollHorizontally(e) {
           e = window.event || e;
@@ -38,7 +28,20 @@ export default function Projects(props) {
           false
         );
       })();
-    }, []);
+    }
+  }, []);
+
+  if (props.projects.length) {
+    cards = props.projects.map((project) => (
+      <Card
+        key={project.projectId}
+        title={project.projectName}
+        days={project.dueDate}
+        theme={project.theme}
+        projectName={project.projectName}
+        projectId={project.projectId}
+      />
+    ));
   }
   return (
     <div ref={projectRef} className={styles.projects}>

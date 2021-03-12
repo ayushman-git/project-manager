@@ -34,8 +34,8 @@ export default function AddProjectModal({ session, closeModal, empty }) {
         active: empty ? true : false,
         archive: false,
       });
-    closeModal();
     reset();
+    closeModal();
   };
   return (
     <Modal closeModal={closeModal}>
