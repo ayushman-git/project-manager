@@ -15,11 +15,15 @@ import DueDate from "../../../../components/DueDate/DueDate";
 import Shortcuts from "../../../../components/Shortcuts/Shortcuts";
 import Modal from "../../../../components/Modal/Modal";
 import ScrumBoard from "../../../../components/ScrumBoard/ScrumBoard";
+import DelModal from "../../../../components/ScrumBoard/DelModal/DelModal";
+
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
   const [shortcutUrl, setShortcutUrl] = useState("");
   const [platform, setPlatform] = useState("other");
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
+  const [toggleProjectDel, setToggleProjectDel] = useState(false);
+  const [toggleProjectArchive, setToggleProjectArchive] = useState(false);
 
   const router = useRouter();
   const db = firebase.firestore();
@@ -64,6 +68,7 @@ export default function project({ session }) {
           if (d.data()) {
             project = {
               ...d.data(),
+              projectId: d.id,
               dueDate: useDaysLeft(d.data().dueDate),
             };
             if (!cancelled) setProjectDetail(project);
@@ -136,6 +141,39 @@ export default function project({ session }) {
     const toBeActive = docs[1];
     alreadyActive.docs[0].ref.update({ active: false });
     toBeActive.docs[0].ref.update({ active: true });
+  };
+
+  const delProject = () => {
+    db.collection("projects")
+      .where(
+        firebase.firestore.FieldPath.documentId(),
+        "==",
+        projectDetail.projectId
+      )
+      .get()
+      .then((query) => {
+        const pr = query.docs[0];
+        pr.ref.delete();
+      });
+    router.back();
+  };
+
+  const archiveProject = async () => {
+    // if (projectDetail.active) {
+    //   let query = firebase.firestore().collection("projects");
+    //   query = query.where("userId", "==", session.uid);
+    //   query = query.where("active", "==", true);
+    //   let queryTwo = firebase.firestore().collection("projects");
+    //   queryTwo = queryTwo.where("userId", "==", session.uid);
+    //   queryTwo = queryTwo.where("active", "==", true);
+    //   const docs = await Promise.all([query.get(), queryTwo.get()]);
+    //   const alreadyActive = docs[0];
+    //   const toBeActive = docs[1];
+    //   // console.log(alreadyActive);
+    //   console.log(toBeActive);
+    //   // alreadyActive.docs[0].ref.update({ active: false, archive: true });
+    //   // toBeActive.docs[0].ref.update({ active: true });
+    // }
   };
 
   if (toggleAddShortcut) {
@@ -264,6 +302,42 @@ export default function project({ session }) {
         <Navbar image={session.picture} />
         {projectView}
         <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
+        <div>
+          <button
+            onMouseDown={() => {
+              setToggleProjectDel(true);
+            }}
+          >
+            Delete
+          </button>
+          <button
+            onMouseDown={() => {
+              setToggleProjectArchive(true);
+            }}
+          >
+            Complete
+          </button>
+        </div>
+        {toggleProjectDel && (
+          <DelModal
+            closeModal={() => setToggleProjectDel(false)}
+            confirmDel={() => {
+              delProject();
+              setToggleProjectDel(false);
+            }}
+            message="Delete Project?"
+          />
+        )}
+        {toggleProjectArchive && (
+          <DelModal
+            closeModal={() => setToggleProjectArchive(false)}
+            confirmDel={() => {
+              archiveProject();
+              setToggleProjectArchive(false);
+            }}
+            message="Project Completed?"
+          />
+        )}
       </div>
     </div>
   );

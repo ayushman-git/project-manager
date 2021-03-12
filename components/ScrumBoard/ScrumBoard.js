@@ -10,8 +10,9 @@ import Tasks from "./Tasks/Tasks";
 
 const ScrumBoard = ({ stories, projectId }) => {
   const db = firebase.firestore();
-  const [toggleStoryModal, setToggleStoryModal] = useState(false);
   const [selectedStoryId, setSelectedStoryId] = useState("");
+
+  const [toggleStoryModal, setToggleStoryModal] = useState(false);
   const [toggleTaskModal, setToggleTaskModal] = useState(false);
   let rows;
   const selectedStory = (e, storyId) => {
@@ -54,11 +55,42 @@ const ScrumBoard = ({ stories, projectId }) => {
     updateFirestoreWithUpdatedTasks(updatedStory);
   };
 
+  const delTaskHandler = (taskId, storyId) => {
+    const selectedStoryIndex = stories.findIndex(
+      (story) => story.id === storyId
+    );
+    const selectedStory = stories.find((story) => story.id === storyId);
+    const selectedTaskIndex = selectedStory.tasks.findIndex(
+      (task) => task.id === taskId
+    );
+    if (selectedTaskIndex > -1) {
+      selectedStory.tasks.splice(selectedTaskIndex, 1);
+    }
+
+    const updatedStory = stories;
+    updatedStory[selectedStoryIndex] = selectedStory;
+    updateFirestoreWithUpdatedTasks(updatedStory);
+  };
+
+  const delStoryHandler = (storyId) => {
+    const selectedStoryIndex = stories.findIndex(
+      (story) => story.id === storyId
+    );
+
+    const updatedStory = stories;
+    updatedStory.splice(selectedStoryIndex, 1);
+    updateFirestoreWithUpdatedTasks(updatedStory);
+  };
+
   if (stories) {
     rows = stories.map((story) => (
       <tr key={story.id}>
         <td>
-          <StoryCard story={story} selectedStory={selectedStory} />
+          <StoryCard
+            story={story}
+            selectedStory={selectedStory}
+            delStory={delStoryHandler}
+          />
         </td>
         <td>
           <Tasks
@@ -66,6 +98,7 @@ const ScrumBoard = ({ stories, projectId }) => {
             storyId={story.id}
             type="idle"
             changeStatusClick={changeTaskStatus}
+            delTask={delTaskHandler}
           />
         </td>
         <td>
@@ -74,6 +107,7 @@ const ScrumBoard = ({ stories, projectId }) => {
             storyId={story.id}
             type="doing"
             changeStatusClick={changeTaskStatus}
+            delTask={delTaskHandler}
           />
         </td>
         <td>
@@ -82,6 +116,7 @@ const ScrumBoard = ({ stories, projectId }) => {
             storyId={story.id}
             type="done"
             changeStatusClick={changeTaskStatus}
+            delTask={delTaskHandler}
           />
         </td>
       </tr>

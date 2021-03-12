@@ -32,6 +32,7 @@ export default function AddProjectModal({ session, closeModal, empty }) {
         theme: theme[Math.floor(Math.random() * theme.length)],
         userId: session.uid,
         active: empty ? true : false,
+        archive: false,
       });
     closeModal();
     reset();
