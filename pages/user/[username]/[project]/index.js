@@ -143,18 +143,43 @@ export default function project({ session }) {
     toBeActive.docs[0].ref.update({ active: true });
   };
 
-  const delProject = () => {
-    db.collection("projects")
-      .where(
-        firebase.firestore.FieldPath.documentId(),
-        "==",
-        projectDetail.projectId
-      )
-      .get()
-      .then((query) => {
-        const pr = query.docs[0];
-        pr.ref.delete();
-      });
+  const delProject = async () => {
+    if (projectDetail.active) {
+      let query = firebase.firestore().collection("projects");
+      query = query.where("userId", "==", session.uid);
+      query = query.where("active", "==", false);
+      query = query.where("archive", "==", false);
+      const docs = await Promise.all([
+        query.get(),
+        db
+          .collection("projects")
+          .where(
+            firebase.firestore.FieldPath.documentId(),
+            "==",
+            projectDetail.projectId
+          )
+          .get(),
+      ]);
+      const makeItActive = docs[0];
+      const deleteThisDoc = docs[1];
+      if (makeItActive.docs.length) {
+        makeItActive.docs[0].ref.update({ active: true });
+      }
+      deleteThisDoc.docs[0].ref.delete();
+    } else {
+      db.collection("projects")
+        .where(
+          firebase.firestore.FieldPath.documentId(),
+          "==",
+          projectDetail.projectId
+        )
+        .get()
+        .then((query) => {
+          const pr = query.docs[0];
+          pr.ref.delete();
+        });
+    }
+
     router.back();
   };
 
