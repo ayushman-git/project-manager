@@ -4,6 +4,8 @@ import firebaseClient from "../../../auth/firebaseClient";
 import firebase from "firebase";
 import nookies from "nookies";
 
+import styles from "./index.module.scss";
+
 import useDaysLeft from "../../../hooks/useDaysLeft";
 import Projects from "../../../components/Projects/Projects";
 import Navbar from "../../../components/Navbar/Navbar";
@@ -65,14 +67,17 @@ export default function User({ session }) {
   } else if (loading) {
     view = <h1>Loading...</h1>;
   }
+
   return (
-    <main className="maxWidth">
-      <Navbar image={session.picture} />
-      {!projects.length && !loading && <h1>Add projects</h1>}
-      {view}
-      <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
-      {addProjectModal}
-    </main>
+    <div className={styles.homeWrap}>
+      <main className="maxWidth">
+        <Navbar image={session.picture} />
+        {!projects.length && !loading && <h1>Add projects</h1>}
+        {view}
+        <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
+        {addProjectModal}
+      </main>
+    </div>
   );
 }
 

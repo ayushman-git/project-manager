@@ -3,7 +3,6 @@ import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import firebase from "firebase";
 import { useRouter } from "next/router";
-import nookies, { destroyCookie } from "nookies";
 
 import clickOutside from "../../hooks/clickOutside";
 
@@ -27,8 +26,6 @@ export default function Navbar({ image }) {
 
   const signOut = async () => {
     await firebase.auth().signOut();
-    // destroyCookie({}, "token");
-    // console.log(nookies.get("token"));
     router.push("/");
   };
 

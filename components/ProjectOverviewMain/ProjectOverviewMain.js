@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import styles from "./ProjectOverviewMain.module.scss";
 import DueDate from "../DueDate/DueDate";
 import Shortcuts from "../Shortcuts/Shortcuts";
-import ProgressBar from "../ProgressBar/ProgressBar";
 import Todos from "../Todos/Todos";
 
 const ProjectOverviewMain = ({ project }) => {
@@ -29,13 +28,21 @@ const ProjectOverviewMain = ({ project }) => {
       });
     }
   };
+  const reduceDescription = (num, str) => {
+    let result;
+    if (str.split(" ").splice(0, str.length).length > num) {
+      result = str.split(" ").splice(0, num).join(" ");
+      return result + "...";
+    }
+    return str;
+  };
   return (
     <section
       onClick={handleOverciewClick}
       className={styles.projectCard}
-      style={{
-        background: `linear-gradient(-45deg, ${project.theme[0]}, ${project.theme[1]})`,
-      }}
+      // style={{
+      //   background: `linear-gradient(-45deg, ${project.theme[0]}, ${project.theme[1]})`,
+      // }}
     >
       <article className={styles.leftBar}>
         <header className={styles.cardHeader}>
@@ -46,7 +53,9 @@ const ProjectOverviewMain = ({ project }) => {
           <DueDate days={project.dueDate} />
         </header>
         {project?.shortcuts && <Shortcuts shortcuts={project.shortcuts} />}
-        <ProgressBar storiesDone={20} totalStories={40} />
+        <article className={styles.description}>
+          {reduceDescription(70, project.description)}
+        </article>
       </article>
       <article className={styles.rightBar}>
         <header className={styles.rightBarHeader}>
