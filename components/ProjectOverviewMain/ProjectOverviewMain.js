@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 import styles from "./ProjectOverviewMain.module.scss";
 import DueDate from "../DueDate/DueDate";
@@ -54,15 +55,22 @@ const ProjectOverviewMain = ({ project }) => {
         </header>
         {project?.shortcuts && <Shortcuts shortcuts={project.shortcuts} />}
         <article className={styles.description}>
-          {reduceDescription(70, project.description)}
+          {reduceDescription(50, project.description)}
         </article>
       </article>
       <article className={styles.rightBar}>
-        <header className={styles.rightBarHeader}>
-          <h3>STORIES</h3>
-        </header>
         {sortedTasks.length > 0 && (
-          <Todos todos={sortedTasks.map((task) => task.task)} />
+          <div>
+            <header className={styles.rightBarHeader}>
+              <h3>Tasks</h3>
+            </header>
+            {sortedTasks.length > 0 && (
+              <Todos todos={sortedTasks.map((task) => task.task)} />
+            )}
+          </div>
+        )}
+        {sortedTasks.length === 0 && (
+          <Image src="/images/illustrations/i_1.svg" height={200} width={200} />
         )}
       </article>
     </section>

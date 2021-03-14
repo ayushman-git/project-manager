@@ -30,7 +30,7 @@
 .tag {
   font-weight: normal;
   font-size: 1rem;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.4);
   margin-left: 0.6rem;
 }
 
@@ -40,6 +40,12 @@
 
 .rightBar {
   width: 30%;
+  display: flex;
+  justify-content: center;
+}
+
+.rightBar > div {
+  width: 100%;
 }
 
 .rightBarHeader {

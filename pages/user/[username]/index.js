@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { verifyIdToken } from "../../../auth/firebaseAdmin";
 import firebaseClient from "../../../auth/firebaseClient";
 import firebase from "firebase";
@@ -17,7 +18,7 @@ export default function User({ session }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
-  let view, addProjectModal;
+  let view, addProjectModal, emptyScreen;
   const db = firebase.firestore();
   firebaseClient();
 
@@ -55,6 +56,15 @@ export default function User({ session }) {
     );
   }
 
+  if (!projects.length && !loading) {
+    emptyScreen = (
+      <div className={styles.emptyDiv}>
+        <Image src="/images/illustrations/i_2.svg" height={300} width={300} />
+        <h2>Add Projects</h2>
+      </div>
+    );
+  }
+
   if (session && projects.length) {
     const activeProject = projects.find((pr) => pr.active);
     const inActiveProjects = projects.filter((pr) => !pr.active);
@@ -72,7 +82,7 @@ export default function User({ session }) {
     <div className={styles.homeWrap}>
       <main className="maxWidth">
         <Navbar image={session.picture} />
-        {!projects.length && !loading && <h1>Add projects</h1>}
+        {emptyScreen}
         {view}
         <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
         {addProjectModal}

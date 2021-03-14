@@ -4,3 +4,14 @@
     url("/images/bg/bg_1.jpg");
   background-size: cover;
 }
+
+.emptyDiv {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
