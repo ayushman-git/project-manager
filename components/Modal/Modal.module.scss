@@ -1,14 +1,25 @@
+@import "../../sass/vars";
+
 .modal {
+  background-color: #141414;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50px;
-  background-color: rgb(98, 98, 255);
   color: white;
-  padding: 2rem;
+  padding: 2rem 2.8rem;
   z-index: 5;
   min-width: 30rem;
+}
+
+.modal header {
+  color: $modalHeaderFontColor;
+}
+
+.modal hr {
+  border: none;
+  border-top: 1px solid #484848;
 }
 
 .back {
@@ -19,4 +30,8 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 4;
+}
+
+.heading {
+  margin: 0.4rem 0;
 }

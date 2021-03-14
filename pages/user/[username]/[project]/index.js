@@ -203,10 +203,10 @@ export default function project({ session }) {
 
   if (toggleAddShortcut) {
     addShortcutModal = (
-      <Modal closeModal={() => setToggleAddShortcut(false)}>
-        <header>
-          <h3>Add Shortcut</h3>
-        </header>
+      <Modal
+        closeModal={() => setToggleAddShortcut(false)}
+        headerMessage="Add Shortcut"
+      >
         <form>
           <label>
             Platform:

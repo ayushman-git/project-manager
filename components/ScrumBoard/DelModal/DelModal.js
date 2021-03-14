@@ -2,10 +2,7 @@ import Modal from "../../Modal/Modal";
 
 const DelModal = ({ closeModal, confirmDel, message }) => {
   return (
-    <Modal closeModal={closeModal}>
-      <header>
-        <h3>{message}</h3>
-      </header>
+    <Modal closeModal={closeModal} headerMessage={message}>
       <button onClick={confirmDel}>Yes</button>
       <button onClick={closeModal}>No</button>
     </Modal>

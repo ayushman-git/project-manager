@@ -32,10 +32,11 @@ const SetTheme = ({ currentTheme, projectId }) => {
 
   if (showModal) {
     modal = (
-      <Modal currentTheme={currentTheme} closeModal={toggleModal}>
-        <header>
-          <h2>Pick a theme</h2>
-        </header>
+      <Modal
+        currentTheme={currentTheme}
+        closeModal={toggleModal}
+        headerMessage="Pick a theme"
+      >
         <section className={styles.gradientsWrap}>{gradients}</section>
       </Modal>
     );

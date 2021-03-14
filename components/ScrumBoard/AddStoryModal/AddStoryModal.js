@@ -43,10 +43,7 @@ const AddStoryModal = ({ closeModal, projectId, stories }) => {
       });
   };
   return (
-    <Modal closeModal={closeModal}>
-      <header>
-        <h3>Add Story</h3>
-      </header>
+    <Modal closeModal={closeModal} headerMessage="Add Story">
       <form>
         <label>Story Description:</label>
         <textarea

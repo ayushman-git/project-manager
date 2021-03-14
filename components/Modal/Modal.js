@@ -1,16 +1,13 @@
 import styles from "./Modal.module.scss";
 
-const Modal = ({ closeModal, children, currentTheme }) => {
+const Modal = ({ closeModal, children, headerMessage }) => {
   return (
     <>
-      <div
-        className={styles.modal}
-        style={{
-          background: currentTheme
-            ? `linear-gradient(-90deg, ${currentTheme[0]}, ${currentTheme[1]})`
-            : "background: black",
-        }}
-      >
+      <div className={styles.modal}>
+        <header>
+          <h2 className={styles.heading}>{headerMessage}</h2>
+        </header>
+        <hr />
         {children}
       </div>
       <div onClick={closeModal} className={styles.back}></div>

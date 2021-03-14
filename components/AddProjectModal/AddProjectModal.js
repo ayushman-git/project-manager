@@ -1,7 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import firebase from "firebase";
+import Image from "next/image";
 
+import styles from "./AddProjectModal.module.scss";
 import theme from "../../assets/theme";
 
 import Modal from "../Modal/Modal";
@@ -37,48 +39,61 @@ export default function AddProjectModal({ session, closeModal, empty }) {
     reset();
     closeModal();
   };
+
   return (
-    <Modal closeModal={closeModal}>
-      <header>
-        <h3>Edit Project</h3>
-      </header>
+    <Modal closeModal={closeModal} headerMessage="Add Project">
       <form onSubmit={addProjectToDb}>
-        <label>
-          Project Name:
-          <input
-            type="text"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-          />
-        </label>
-        <label>
-          Tag:
-          <input
-            type="text"
-            value={tag}
-            onChange={(e) => setTag(e.target.value)}
-          />
-        </label>
+        <div className={styles.formTwoInputs}>
+          <label>
+            Project Name: <br />
+            <input
+              autoFocus
+              type="text"
+              placeholder="Enter your project's name"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+            />
+          </label>
+          <label>
+            Tag: <br />
+            <input
+              type="text"
+              placeholder="Enter your project's type"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+            />
+          </label>
+        </div>
         <br />
         <label>
-          Description:
+          Description: <br />
           <textarea
             rows="4"
+            placeholder="Write a few lines about your project"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
         </label>
         <br />
-        <label>
-          Deadline:
-          <input
-            type="date"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
-          />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
+        <div className={styles.formTwoInputs}>
+          <label>
+            Deadline: <br />
+            <input
+              type="date"
+              placeholder="Enter deadline date"
+              min={new Date().toISOString().split("T")[0]}
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+            />
+          </label>
+          <br />
+          <button
+            className={`${styles.submitButton} success-btn`}
+            type="submit"
+          >
+            Submit <Image src="/images/submit.svg" width={15} height={15} />
+          </button>
+        </div>
       </form>
     </Modal>
   );

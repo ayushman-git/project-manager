@@ -1,0 +1,102 @@
+@import "./vars";
+
+.maxWidth {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.card {
+  border-radius: 30px;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.2)
+  );
+  color: white;
+  padding: 0.1rem 2rem;
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6rem;
+  margin: 0.4rem 0;
+}
+
+label {
+  color: #484848;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+input {
+  background-color: #484848;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  color: rgb(234, 234, 236);
+  margin: 0.8rem 0;
+  min-width: 16rem;
+}
+
+textarea {
+  box-sizing: border-box;
+  background-color: #484848;
+  outline: none;
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 20px;
+  color: rgb(234, 234, 236);
+  margin: 0.8rem 0;
+  resize: vertical;
+  min-height: 3rem;
+}
+::placeholder {
+  font-family: "Roboto";
+  font-size: 14px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(0, 0, 0, 0.1);
+  border-radius: 30px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(0, 0, 0);
+}
+
+.success-btn {
+  background-color: $successColor;
+  border: none;
+  outline: none;
+  height: max-content;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  color: #141414;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+form {
+  margin-top: 1.4rem;
+}

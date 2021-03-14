@@ -33,10 +33,7 @@ const AddTaskModal = ({ closeModal, projectId, stories, selectedStoryId }) => {
     closeModal();
   };
   return (
-    <Modal closeModal={closeModal}>
-      <header>
-        <h3>Add Task</h3>
-      </header>
+    <Modal closeModal={closeModal} headerMessage="Add Task">
       <form>
         <label>Task:</label>
         <input value={task} onChange={(e) => setTask(e.target.value)} />
