@@ -97,6 +97,25 @@ textarea {
   gap: 1rem;
   cursor: pointer;
 }
+
+.secondary-btn {
+  box-sizing: border-box;
+  background-color: transparent;
+  border: 2px solid $failureColor;
+  outline: none;
+  height: max-content;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  color: $failureColor;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
 form {
   margin-top: 1.4rem;
 }

@@ -1,7 +1,25 @@
-.storyCard footer {
-  text-align: right;
+.storyCard {
+  position: relative;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: white;
+  min-height: 8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.add {
+.addWrap {
+  background-color: white;
+  border-radius: 50%;
   cursor: pointer;
+  height: 20px;
+  width: 20px;
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  transform: translateX(50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

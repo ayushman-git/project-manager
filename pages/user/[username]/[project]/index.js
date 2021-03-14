@@ -35,6 +35,26 @@ export default function project({ session }) {
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <h1>Loading...</h1>;
   let addShortcutModal;
+  let projectButtons = (
+    <div className={styles.buttonWrap}>
+      <button
+        className="secondary-btn"
+        onMouseDown={() => {
+          setToggleProjectDel(true);
+        }}
+      >
+        Delete
+      </button>
+      <button
+        className="success-btn"
+        onMouseDown={() => {
+          setToggleProjectArchive(true);
+        }}
+      >
+        Complete
+      </button>
+    </div>
+  );
 
   const updateFirestore = (e, ref, field) => {
     const newData = e.currentTarget.textContent;
@@ -323,26 +343,13 @@ export default function project({ session }) {
           : {}
       }
     >
-      <div className="maxWidth">
+      <div className="maxWidth" style={{ minHeight: "100vh" }}>
         <Navbar image={session.picture} />
         {projectView}
+        <hr className={styles.divider} />
+        <h2 style={{ textAlign: "center" }}>Scrum Board</h2>
         <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
-        <div>
-          <button
-            onMouseDown={() => {
-              setToggleProjectDel(true);
-            }}
-          >
-            Delete
-          </button>
-          <button
-            onMouseDown={() => {
-              setToggleProjectArchive(true);
-            }}
-          >
-            Complete
-          </button>
-        </div>
+        {projectButtons}
         {toggleProjectDel && (
           <DelModal
             closeModal={() => setToggleProjectDel(false)}
