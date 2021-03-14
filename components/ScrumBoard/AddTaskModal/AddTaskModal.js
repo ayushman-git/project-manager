@@ -35,10 +35,22 @@ const AddTaskModal = ({ closeModal, projectId, stories, selectedStoryId }) => {
   return (
     <Modal closeModal={closeModal} headerMessage="Add Task">
       <form>
-        <label>Task:</label>
-        <input value={task} onChange={(e) => setTask(e.target.value)} />
+        <label>
+          Task: <br />
+          <input
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+            placeholder="Add a task"
+          />
+        </label>
         <br />
-        <button onClick={addStoryHandler}>Add</button>
+        <button
+          className="success-btn"
+          style={{ float: "right" }}
+          onClick={addStoryHandler}
+        >
+          Add
+        </button>
       </form>
     </Modal>
   );

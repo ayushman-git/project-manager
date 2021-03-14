@@ -229,8 +229,9 @@ export default function project({ session }) {
       >
         <form>
           <label>
-            Platform:
+            Platform: <br />
             <select
+              className="dropdown-input"
               value={platform}
               onChange={(e) => setPlatform(e.target.value)}
             >
@@ -240,15 +241,23 @@ export default function project({ session }) {
               <option value="xd">Adobe XD</option>
               <option value="firebase">Firebase</option>
             </select>
+            <br />
           </label>
           <label>
+            URL: <br />
             <input
               type="text"
               value={shortcutUrl}
               onChange={(e) => setShortcutUrl(e.target.value)}
             />
           </label>
-          <button onClick={updateShortcuts}>Submit</button>
+          <button
+            className="success-btn"
+            style={{ float: "right" }}
+            onClick={updateShortcuts}
+          >
+            Submit
+          </button>
         </form>
       </Modal>
     );

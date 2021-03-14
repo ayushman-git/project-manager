@@ -45,14 +45,23 @@ const AddStoryModal = ({ closeModal, projectId, stories }) => {
   return (
     <Modal closeModal={closeModal} headerMessage="Add Story">
       <form>
-        <label>Story Description:</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows="3"
-        ></textarea>
+        <label>
+          Story Description:
+          <textarea
+            value={description}
+            placeholder="Add Story for your project"
+            onChange={(e) => setDescription(e.target.value)}
+            rows="3"
+          ></textarea>
+        </label>
         <br />
-        <button onClick={addStoryHandler}>Add</button>
+        <button
+          className="success-btn"
+          style={{ float: "right" }}
+          onClick={addStoryHandler}
+        >
+          Add
+        </button>
       </form>
     </Modal>
   );

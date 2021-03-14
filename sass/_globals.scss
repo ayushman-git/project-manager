@@ -36,7 +36,9 @@ input {
   border-radius: 999px;
   color: rgb(234, 234, 236);
   margin: 0.8rem 0;
+  width: 100%;
   min-width: 16rem;
+  box-sizing: border-box;
 }
 
 textarea {
@@ -52,6 +54,19 @@ textarea {
   margin: 0.8rem 0;
   resize: vertical;
   min-height: 3rem;
+}
+
+.dropdown-input {
+  background-color: #484848;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  color: rgb(234, 234, 236);
+  margin: 0.8rem 0;
+  min-width: 16rem;
+  box-sizing: border-box;
 }
 ::placeholder {
   font-family: "Roboto";
