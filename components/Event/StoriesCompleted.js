@@ -3,7 +3,7 @@ import EventCompleted from "../EventCompleted/EventCompleted";
 const StoriesCompleted = ({ stories }) => {
   let completed = 0;
   let total = 0;
-  stories.forEach((story) => {
+  stories?.forEach((story) => {
     let c = 0;
     story.tasks.forEach((task) => {
       if (task.type === "done") {
