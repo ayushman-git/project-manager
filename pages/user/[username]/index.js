@@ -99,7 +99,7 @@ export default function User({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
-    const token = await verifyIdToken(cookies.token);
+    const token = await verifyIdToken(cookies.tokenCookie);
     return {
       props: {
         session: token,
@@ -110,7 +110,7 @@ export async function getServerSideProps(context) {
     context.res.writeHead(302, { location: "/" });
     context.res.end();
     return {
-      props: { session: null },
+      props: {},
     };
   }
 }

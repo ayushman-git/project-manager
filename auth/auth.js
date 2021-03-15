@@ -3,7 +3,6 @@ import firebaseClient from "./firebaseClient";
 import firebase from "firebase/app";
 import nookies from "nookies";
 import "firebase/auth";
-
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -14,11 +13,12 @@ export const AuthProvider = ({ children }) => {
     return firebase.auth().onIdTokenChanged(async (user) => {
       if (!user) {
         setUser(null);
-        nookies.set(undefined, "token", "", {});
+        nookies.set(undefined, "tokenCookie", "", {});
         return;
       }
       const token = await user.getIdToken();
-      nookies.set(undefined, "token", token, {});
+      setUser(user);
+      nookies.set(undefined, "tokenCookie", token, {});
     });
   }, []);
 
@@ -26,5 +26,4 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 };
-
 export const userAuth = () => useContext(AuthContext);
