@@ -429,6 +429,7 @@ export default function project({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
+    console.log(cookies);
     const token = await verifyIdToken(cookies.token);
     return {
       props: { session: token },
