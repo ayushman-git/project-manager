@@ -82,14 +82,34 @@ const ScrumBoard = ({ stories, projectId }) => {
     updateFirestoreWithUpdatedTasks(updatedStory);
   };
 
+  const updateStory = (e, ref, storyId) => {
+    const newData = e.currentTarget.textContent;
+    const editedStoryIndex = stories.findIndex((story) => story.id === storyId);
+    const updatedStories = stories;
+    updatedStories[editedStoryIndex].description = newData;
+    console.log(updatedStories);
+    db.collection("projects")
+      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+      .get()
+      .then((query) => {
+        const pr = query.docs[0];
+        pr.ref.update({
+          stories: updatedStories,
+        });
+      });
+    ref.current.contentEditable = false;
+  };
+
   if (stories) {
     rows = stories.map((story) => (
       <tr key={story.id}>
         <td>
           <StoryCard
+            projectId={projectId}
             story={story}
             selectedStory={selectedStory}
             delStory={delStoryHandler}
+            updateStory={updateStory}
           />
         </td>
         <td>
