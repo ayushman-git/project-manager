@@ -11,3 +11,8 @@
 .taskCard img {
   cursor: pointer;
 }
+
+.taskCard > p {
+  margin: 0.4rem 0;
+  max-width: 80%;
+}

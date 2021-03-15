@@ -26,22 +26,23 @@ export default function User({ session }) {
     let cancelled = false;
     setLoading(true);
     (async () => {
-      db.collection("projects")
-        .where("userId", "==", session.uid)
-        .onSnapshot((snapshotOfProjects) => {
-          const projects = [];
-          snapshotOfProjects.forEach((doc) => {
-            projects.push({
-              ...doc.data(),
-              projectId: doc.id,
-              dueDate: useDaysLeft(doc.data().dueDate),
-            });
+      let query = db.collection("projects");
+      query = query.where("userId", "==", session.uid);
+      query = query.where("archive", "==", false);
+      query.onSnapshot((snapshotOfProjects) => {
+        const projects = [];
+        snapshotOfProjects.forEach((doc) => {
+          projects.push({
+            ...doc.data(),
+            projectId: doc.id,
+            dueDate: useDaysLeft(doc.data().dueDate),
           });
-          if (!cancelled) {
-            setProjects(projects);
-            setLoading(false);
-          }
         });
+        if (!cancelled) {
+          setProjects(projects);
+          setLoading(false);
+        }
+      });
     })();
     return () => (cancelled = true);
   }, []);

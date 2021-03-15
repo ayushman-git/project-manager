@@ -24,6 +24,7 @@ const StoryCard = ({ story, selectedStory, delStory, updateStory }) => {
   const middleMouseHandler = (e) => {
     if (e.button === 1) {
       setToggleStoryDelModal(true);
+      e.preventDefault();
     }
   };
   return (

@@ -16,6 +16,8 @@ import Shortcuts from "../../../../components/Shortcuts/Shortcuts";
 import Modal from "../../../../components/Modal/Modal";
 import ScrumBoard from "../../../../components/ScrumBoard/ScrumBoard";
 import DelModal from "../../../../components/ScrumBoard/DelModal/DelModal";
+import TasksCompleted from "../../../../components/Event/TasksCompleted";
+import StoriesCompleted from "../../../../components/Event/StoriesCompleted";
 
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
@@ -35,6 +37,31 @@ export default function project({ session }) {
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <h1>Loading...</h1>;
   let addShortcutModal;
+  useEffect(() => {
+    let cancelled = false;
+    if (router.query?.projectId) {
+      localStorage.setItem("projectId", projectId);
+    }
+    db.collection("projects")
+      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+      .onSnapshot((doc) => {
+        let project = {};
+        doc.forEach((d) => {
+          if (d.data()) {
+            project = {
+              ...d.data(),
+              projectId: d.id,
+              dueDate: useDaysLeft(d.data().dueDate),
+            };
+            if (!cancelled) setProjectDetail(project);
+          }
+        });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   let projectButtons = (
     <div className={styles.buttonWrap}>
       <button
@@ -74,31 +101,6 @@ export default function project({ session }) {
     ref.current.contentEditable = true;
     ref.current.focus();
   };
-
-  useEffect(() => {
-    let cancelled = false;
-    if (router.query?.projectId) {
-      localStorage.setItem("projectId", projectId);
-    }
-    db.collection("projects")
-      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-      .onSnapshot((doc) => {
-        let project = {};
-        doc.forEach((d) => {
-          if (d.data()) {
-            project = {
-              ...d.data(),
-              projectId: d.id,
-              dueDate: useDaysLeft(d.data().dueDate),
-            };
-            if (!cancelled) setProjectDetail(project);
-          }
-        });
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const updateShortcuts = (e) => {
     e.preventDefault();
@@ -165,7 +167,7 @@ export default function project({ session }) {
 
   const delProject = async () => {
     if (projectDetail.active) {
-      let query = firebase.firestore().collection("projects");
+      let query = db.collection("projects");
       query = query.where("userId", "==", session.uid);
       query = query.where("active", "==", false);
       query = query.where("archive", "==", false);
@@ -204,21 +206,44 @@ export default function project({ session }) {
   };
 
   const archiveProject = async () => {
-    // if (projectDetail.active) {
-    //   let query = firebase.firestore().collection("projects");
-    //   query = query.where("userId", "==", session.uid);
-    //   query = query.where("active", "==", true);
-    //   let queryTwo = firebase.firestore().collection("projects");
-    //   queryTwo = queryTwo.where("userId", "==", session.uid);
-    //   queryTwo = queryTwo.where("active", "==", true);
-    //   const docs = await Promise.all([query.get(), queryTwo.get()]);
-    //   const alreadyActive = docs[0];
-    //   const toBeActive = docs[1];
-    //   // console.log(alreadyActive);
-    //   console.log(toBeActive);
-    //   // alreadyActive.docs[0].ref.update({ active: false, archive: true });
-    //   // toBeActive.docs[0].ref.update({ active: true });
-    // }
+    if (projectDetail.active) {
+      if (projectDetail.active) {
+        let selectedProject = db.collection("projects");
+        selectedProject = selectedProject.where(
+          firebase.firestore.FieldPath.documentId(),
+          "==",
+          projectDetail.projectId
+        );
+
+        let newProject = db.collection("projects");
+        newProject = newProject.where("userId", "==", session.uid);
+        newProject = newProject.where("active", "==", false);
+        newProject = newProject.where("archive", "==", false);
+        const docs = await Promise.all([
+          selectedProject.get(),
+          newProject.get(),
+        ]);
+        const selectedProjectRef = docs[0];
+        const newProjectRef = docs[1];
+        selectedProjectRef.docs[0].ref.update({ active: false, archive: true });
+        if (newProjectRef.docs.length) {
+          newProjectRef.docs[0].ref.update({ active: true });
+        }
+      }
+    } else {
+      db.collection("projects")
+        .where(
+          firebase.firestore.FieldPath.documentId(),
+          "==",
+          projectDetail.projectId
+        )
+        .get()
+        .then((query) => {
+          const pr = query.docs[0];
+          pr.ref.update({ archive: true });
+        });
+    }
+    router.back();
   };
 
   if (toggleAddShortcut) {
@@ -264,69 +289,71 @@ export default function project({ session }) {
   }
 
   if (Object.keys(projectDetail).length > 0) {
-    projectView = (
-      <section className={styles.projectWrap}>
-        <header className={styles.header}>
-          <div className={styles.titleWithAddOns}>
-            <h1
-              ref={titleRef}
-              onDoubleClick={(e) => makeEditable(e, titleRef)}
-              onBlur={(e) => updateFirestore(e, titleRef, "projectName")}
+    const header = (
+      <header className={styles.header}>
+        <div className={styles.titleWithAddOns}>
+          <h1
+            ref={titleRef}
+            onDoubleClick={(e) => makeEditable(e, titleRef)}
+            onBlur={(e) => updateFirestore(e, titleRef, "projectName")}
+          >
+            {projectDetail.projectName}
+          </h1>
+          <span className={styles.tag}>
+            #
+            <span
+              ref={tagRef}
+              onBlur={(e) => updateFirestore(e, tagRef, "tag")}
+              onDoubleClick={(e) => makeEditable(e, tagRef)}
             >
-              {projectDetail.projectName}
-            </h1>
-            <span className={styles.tag}>
-              #
-              <span
-                ref={tagRef}
-                onBlur={(e) => updateFirestore(e, tagRef, "tag")}
-                onDoubleClick={(e) => makeEditable(e, tagRef)}
-              >
-                {projectDetail.tag}
-              </span>
+              {projectDetail.tag}
             </span>
-            <DueDate
-              days={projectDetail.dueDate}
-              projectId={projectId}
-              className={styles.dueDate}
+          </span>
+          <DueDate
+            days={projectDetail.dueDate}
+            projectId={projectId}
+            className={styles.dueDate}
+          />
+        </div>
+        <div className={styles.headerRight}>
+          <Image
+            src={
+              projectDetail.active
+                ? "/images/star-fill.svg"
+                : "/images/star.svg"
+            }
+            width={20}
+            height={20}
+            onClick={changeActiveStatus}
+          />
+          <SetTheme
+            currentTheme={projectDetail.theme}
+            projectId={
+              router.query.projectId || localStorage.getItem("projectId")
+            }
+          />
+        </div>
+      </header>
+    );
+    const info = (
+      <section className={styles.info}>
+        <section className={styles.shortcutsWrap}>
+          {projectDetail.shortcuts && (
+            <Shortcuts
+              shortcuts={projectDetail.shortcuts}
+              delShortcut={delShortcutHandler}
             />
-          </div>
-          <div className={styles.headerRight}>
-            <Image
-              src={
-                projectDetail.active
-                  ? "/images/star-fill.svg"
-                  : "/images/star.svg"
-              }
-              width={20}
-              height={20}
-              onClick={changeActiveStatus}
-            />
-            <SetTheme
-              currentTheme={projectDetail.theme}
-              projectId={
-                router.query.projectId || localStorage.getItem("projectId")
-              }
-            />
-          </div>
-        </header>
-        <section className={styles.info}>
-          <section className={styles.shortcutsWrap}>
-            {projectDetail.shortcuts && (
-              <Shortcuts
-                shortcuts={projectDetail.shortcuts}
-                delShortcut={delShortcutHandler}
-              />
-            )}
+          )}
 
-            <Image
-              src="/images/plus.svg"
-              width={15}
-              height={15}
-              className={styles.addShortcut}
-              onClick={() => setToggleAddShortcut(true)}
-            />
-          </section>
+          <Image
+            src="/images/plus.svg"
+            width={15}
+            height={15}
+            className={styles.addShortcut}
+            onClick={() => setToggleAddShortcut(true)}
+          />
+        </section>
+        <div className={styles.mainWrap}>
           <div
             className={styles.description}
             ref={descriptionRef}
@@ -335,7 +362,22 @@ export default function project({ session }) {
           >
             {projectDetail.description}
           </div>
-        </section>
+
+          <aside className={styles.stats}>
+            <div className={`${styles.statCard} card`}>
+              <TasksCompleted stories={projectDetail.stories} />
+            </div>
+            <div className={`${styles.statCard} card`}>
+              <StoriesCompleted stories={projectDetail.stories} />
+            </div>
+          </aside>
+        </div>
+      </section>
+    );
+    projectView = (
+      <section className={styles.projectWrap}>
+        {header}
+        {info}
         {addShortcutModal}
       </section>
     );

@@ -151,3 +151,11 @@ textarea {
 form {
   margin-top: 1.4rem;
 }
+
+td {
+  max-width: 18rem;
+}
+
+.error-inp {
+  box-shadow: inset 0px 0px 0px 1px $failureColor;
+}

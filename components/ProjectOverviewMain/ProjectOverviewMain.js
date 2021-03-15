@@ -6,6 +6,8 @@ import styles from "./ProjectOverviewMain.module.scss";
 import DueDate from "../DueDate/DueDate";
 import Shortcuts from "../Shortcuts/Shortcuts";
 import Todos from "../Todos/Todos";
+import TasksCompleted from "../Event/TasksCompleted";
+import StoriesCompleted from "../Event/StoriesCompleted";
 
 const ProjectOverviewMain = ({ project }) => {
   let sortedTasks = [];
@@ -54,9 +56,15 @@ const ProjectOverviewMain = ({ project }) => {
           <DueDate days={project.dueDate} />
         </header>
         {project?.shortcuts && <Shortcuts shortcuts={project.shortcuts} />}
-        <article className={styles.description}>
-          {reduceDescription(50, project.description)}
-        </article>
+        <section className={styles.mainWrap}>
+          <article className={styles.description}>
+            {reduceDescription(50, project.description)}
+          </article>
+          <aside className={styles.stats}>
+            <TasksCompleted stories={project.stories} />
+            <StoriesCompleted stories={project.stories} />
+          </aside>
+        </section>
       </article>
       <article className={styles.rightBar}>
         {sortedTasks.length > 0 && (

@@ -9,6 +9,7 @@ export default function Shortcut({ url, image, delShortcut, id }) {
   const mouseDownHandler = (e) => {
     if (e.button === 1 && delShortcut) {
       delShortcut(e, id);
+      e.preventDefault();
     }
   };
   return (

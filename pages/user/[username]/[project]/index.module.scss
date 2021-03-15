@@ -103,3 +103,27 @@
     bottom: 0;
   }
 }
+
+.mainWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats {
+  color: white;
+  text-align: center;
+  display: flex;
+  gap: 5rem;
+  width: 40%;
+}
+
+.stats > * {
+  margin-bottom: 1rem;
+}
+
+.statCard {
+  color: white;
+  padding: 2rem;
+  user-select: none;
+}

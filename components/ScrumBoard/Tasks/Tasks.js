@@ -16,6 +16,7 @@ const Tasks = ({ tasks, type, changeStatusClick, storyId, delTask }) => {
     if (e.button === 1) {
       setSelectedTaskId(taskId);
       setToggleTaskDelModal(true);
+      e.preventDefault();
     }
   };
 
@@ -32,6 +33,7 @@ const Tasks = ({ tasks, type, changeStatusClick, storyId, delTask }) => {
             src="/images/left.svg"
             width={25}
             height={25}
+            layout="fixed"
           />
         )}
         <p>{task.task}</p>
