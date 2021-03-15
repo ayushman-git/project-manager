@@ -113,6 +113,23 @@ textarea {
   cursor: pointer;
 }
 
+.failure-btn {
+  background-color: $failureColor;
+  border: none;
+  outline: none;
+  height: max-content;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  color: #141414;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
 .secondary-btn {
   box-sizing: border-box;
   background-color: transparent;

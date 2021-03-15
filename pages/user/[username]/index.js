@@ -59,7 +59,11 @@ export default function User({ session }) {
   if (!projects.length && !loading) {
     emptyScreen = (
       <div className={styles.emptyDiv}>
-        <Image src="/images/illustrations/i_2.svg" height={300} width={300} />
+        <Image
+          src={`/images/illustrations/i_${Math.floor(Math.random() * 8)}.svg`}
+          height={300}
+          width={300}
+        />
         <h2>Add Projects</h2>
       </div>
     );

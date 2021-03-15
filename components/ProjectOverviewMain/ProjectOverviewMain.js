@@ -70,7 +70,11 @@ const ProjectOverviewMain = ({ project }) => {
           </div>
         )}
         {sortedTasks.length === 0 && (
-          <Image src="/images/illustrations/i_1.svg" height={200} width={200} />
+          <Image
+            src={`/images/illustrations/i_${Math.floor(Math.random() * 8)}.svg`}
+            height={200}
+            width={200}
+          />
         )}
       </article>
     </section>
