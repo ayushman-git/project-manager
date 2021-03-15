@@ -14,17 +14,11 @@ export const AuthProvider = ({ children }) => {
     return firebase.auth().onIdTokenChanged(async (user) => {
       if (!user) {
         setUser(null);
-        nookies.set(undefined, "token", "", {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-        });
+        nookies.set(undefined, "token", "", {});
         return;
       }
       const token = await user.getIdToken();
-      nookies.set(undefined, "token", token, {
-        maxAge: 30 * 24 * 60 * 60,
-        path: "/",
-      });
+      nookies.set(undefined, "token", token, {});
     });
   }, []);
 
