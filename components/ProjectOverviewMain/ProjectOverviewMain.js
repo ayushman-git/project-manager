@@ -60,10 +60,12 @@ const ProjectOverviewMain = ({ project }) => {
           <article className={styles.description}>
             {reduceDescription(50, project.description)}
           </article>
-          <aside className={styles.stats}>
-            <TasksCompleted stories={project.stories} />
-            <StoriesCompleted stories={project.stories} />
-          </aside>
+          {project.stories?.length > 0 && (
+            <aside className={styles.stats}>
+              <TasksCompleted stories={project.stories} />
+              <StoriesCompleted stories={project.stories} />
+            </aside>
+          )}
         </section>
       </article>
       <article className={styles.rightBar}>
