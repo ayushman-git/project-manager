@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import nookies from "nookies";
 import { verifyIdToken } from "../../../../auth/firebaseAdmin";
+import firebaseClient from "../../../../auth/firebaseClient";
 import firebase from "firebase";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -26,7 +27,7 @@ export default function project({ session }) {
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
   const [toggleProjectDel, setToggleProjectDel] = useState(false);
   const [toggleProjectArchive, setToggleProjectArchive] = useState(false);
-
+  firebaseClient();
   const router = useRouter();
   const db = firebase.firestore();
 
@@ -429,6 +430,7 @@ export default function project({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
+    console.log(cookies);
     const token = await verifyIdToken(cookies.tknCookies);
     const db = firebase.firestore();
 

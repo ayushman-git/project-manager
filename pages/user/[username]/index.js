@@ -3,7 +3,6 @@ import Image from "next/image";
 import { verifyIdToken } from "../../../auth/firebaseAdmin";
 import firebaseClient from "../../../auth/firebaseClient";
 import firebase from "firebase";
-import Cookies from "js-cookie";
 import nookies from "nookies";
 
 import styles from "./index.module.scss";

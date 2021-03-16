@@ -14,12 +14,15 @@ export const AuthProvider = ({ children }) => {
     return firebase.auth().onIdTokenChanged(async (user) => {
       if (!user) {
         setUser(null);
-        Cookies.remove("tknCookies");
+        Cookies.remove("tknCookies", { path: "/" });
         return;
       }
       const token = await user.getIdToken();
       setUser(user);
-      nookies.set(undefined, "tknCookies", token, {});
+      nookies.set(undefined, "tknCookies", token, {
+        path: "/",
+        maxAge: 3600,
+      });
     });
   }, []);
 
