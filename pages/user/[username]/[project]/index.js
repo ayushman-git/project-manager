@@ -429,16 +429,29 @@ export default function project({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
-    const token = await verifyIdToken(cookies.tokenCookie);
+    const token = await verifyIdToken(cookies.tknCookies);
+    const db = firebase.firestore();
+
+    let query = db.collection("projects");
+    query = query.where(
+      firebase.firestore.FieldPath.documentId(),
+      "==",
+      context.query.projectId
+    );
+    query = query.where("userId", "==", token.uid);
+    const docs = await query.get();
+    if (docs.docs.length === 0) {
+      throw new Error();
+    }
     return {
       props: { session: token },
     };
   } catch (err) {
     console.log(err);
-    context.res.writeHead(302, { location: "/" });
+    context.res.writeHead(302, { Location: "/" });
     context.res.end();
     return {
-      props: null,
+      props: {},
     };
   }
 }

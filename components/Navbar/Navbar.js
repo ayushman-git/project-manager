@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import firebase from "firebase";
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 
 import clickOutside from "../../hooks/clickOutside";
@@ -26,6 +27,7 @@ export default function Navbar({ image }) {
 
   const signOut = async () => {
     await firebase.auth().signOut();
+    Cookies.remove("tknCookies");
     router.push("/");
   };
 

@@ -3,11 +3,11 @@ import React, { useRef, useEffect } from "react";
 import Card from "../SecondaryCards/SecondaryCards";
 import styles from "./Projects.module.scss";
 
-export default function Projects(props) {
+export default function Projects({ projects }) {
   const projectRef = useRef();
   let cards;
   useEffect(() => {
-    if (props.projects.length) {
+    if (projects.length) {
       (function () {
         function scrollHorizontally(e) {
           e = window.event || e;
@@ -31,8 +31,8 @@ export default function Projects(props) {
     }
   }, []);
 
-  if (props.projects.length) {
-    cards = props.projects.map((project) => (
+  if (projects.length) {
+    cards = projects.map((project) => (
       <Card
         key={project.projectId}
         title={project.projectName}

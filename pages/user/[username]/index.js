@@ -3,6 +3,7 @@ import Image from "next/image";
 import { verifyIdToken } from "../../../auth/firebaseAdmin";
 import firebaseClient from "../../../auth/firebaseClient";
 import firebase from "firebase";
+import Cookies from "js-cookie";
 import nookies from "nookies";
 
 import styles from "./index.module.scss";
@@ -21,7 +22,6 @@ export default function User({ session }) {
   let view, addProjectModal, emptyScreen;
   const db = firebase.firestore();
   firebaseClient();
-
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -61,7 +61,7 @@ export default function User({ session }) {
     emptyScreen = (
       <div className={styles.emptyDiv}>
         <Image
-          src={`/images/illustrations/i_${Math.floor(Math.random() * 8)}.svg`}
+          src={`/images/illustrations/i_${Math.floor(Math.random() * 7)}.svg`}
           height={300}
           width={300}
         />
@@ -80,7 +80,15 @@ export default function User({ session }) {
       </div>
     );
   } else if (loading) {
-    view = <h1>Loading...</h1>;
+    view = (
+      <div className="loader">
+        <div className="spinner">
+          <div className="bounce1"></div>
+          <div className="bounce2"></div>
+          <div className="bounce3"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -99,7 +107,7 @@ export default function User({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
-    const token = await verifyIdToken(cookies.tokenCookie);
+    const token = await verifyIdToken(cookies.tknCookies);
     return {
       props: {
         session: token,
@@ -107,7 +115,7 @@ export async function getServerSideProps(context) {
     };
   } catch (err) {
     console.log("err");
-    context.res.writeHead(302, { location: "/" });
+    context.res.writeHead(302, { Location: "/" });
     context.res.end();
     return {
       props: {},

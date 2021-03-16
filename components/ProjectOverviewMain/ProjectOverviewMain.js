@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useSpring, animated } from "react-spring";
 
 import styles from "./ProjectOverviewMain.module.scss";
 import DueDate from "../DueDate/DueDate";
@@ -39,8 +40,29 @@ const ProjectOverviewMain = ({ project }) => {
     }
     return str;
   };
+
+  const onMountTransition = useSpring({
+    from: {
+      opacity: 0,
+      transform: "translateY(40px) scale(0.8)",
+      perspective: 500,
+    },
+    opacity: 1,
+    transform: "translateY(0px) scale(1)",
+    perspective: 0,
+  });
+  const imageTransition = useSpring({
+    from: {
+      opacity: 0,
+      transform: "translateY(40px) scale(0.8)",
+    },
+    opacity: 1,
+    transform: "translateY(0px) scale(1)",
+  });
+
   return (
-    <section
+    <animated.section
+      style={onMountTransition}
       onClick={handleOverciewClick}
       className={styles.projectCard}
       // style={{
@@ -80,14 +102,24 @@ const ProjectOverviewMain = ({ project }) => {
           </div>
         )}
         {sortedTasks.length === 0 && (
-          <Image
-            src={`/images/illustrations/i_${Math.floor(Math.random() * 8)}.svg`}
-            height={200}
-            width={200}
-          />
+          <animated.div
+            style={{
+              ...imageTransition,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              src={`/images/illustrations/i_${Math.floor(
+                Math.random() * 8
+              )}.svg`}
+              height={200}
+              width={200}
+            />
+          </animated.div>
         )}
       </article>
-    </section>
+    </animated.section>
   );
 };
 

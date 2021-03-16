@@ -1,16 +1,30 @@
+import { useSpring, animated } from "react-spring";
 import styles from "./Modal.module.scss";
 
 const Modal = ({ closeModal, children, headerMessage }) => {
+  const onMountTransition = useSpring({
+    from: { transform: "translate(-50%, 30%) scale(0.4)" },
+    transform: "translate(-50%, -50%) scale(1)",
+  });
+  const bgTransition = useSpring({
+    from: { opacity: 0 },
+    opacity: 1,
+  });
+
   return (
     <>
-      <div className={styles.modal}>
+      <animated.div style={onMountTransition} className={styles.modal}>
         <header>
           <h2 className={styles.heading}>{headerMessage}</h2>
         </header>
         <hr />
         {children}
-      </div>
-      <div onClick={closeModal} className={styles.back}></div>
+      </animated.div>
+      <animated.div
+        style={bgTransition}
+        onClick={closeModal}
+        className={styles.back}
+      ></animated.div>
     </>
   );
 };

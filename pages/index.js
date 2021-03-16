@@ -2,7 +2,9 @@ import Image from "next/image";
 import styles from "./index.module.scss";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const Home = () => {
   const router = useRouter();
@@ -18,6 +20,10 @@ const Home = () => {
     const provider = new firebase.auth.GithubAuthProvider();
     logInWithProvider(provider);
   };
+
+  useEffect(() => {
+    Cookies.remove("tknCookies");
+  }, []);
 
   const logInWithProvider = (provider) => {
     firebase
