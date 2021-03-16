@@ -7,6 +7,9 @@ import Modal from "../../Modal/Modal";
 const AddTaskModal = ({ closeModal, projectId, stories, selectedStoryId }) => {
   const db = firebase.firestore();
   const [task, setTask] = useState("");
+  const [taskErr, setTaskErr] = useState(false);
+
+  const ERR_MESSAGE = "Field cannot be left empty!";
 
   const updateSelectedStory = () => {
     const selectedStory = stories.find((story) => story.id === selectedStoryId);
@@ -19,18 +22,21 @@ const AddTaskModal = ({ closeModal, projectId, stories, selectedStoryId }) => {
 
   const addStoryHandler = (e) => {
     e.preventDefault();
-
-    db.collection("projects")
-      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-      .get()
-      .then((query) => {
-        const pr = query.docs[0];
-        pr.ref.update({
-          stories: updateSelectedStory(),
+    if (!task) {
+      setTaskErr(true);
+    } else {
+      db.collection("projects")
+        .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+        .get()
+        .then((query) => {
+          const pr = query.docs[0];
+          pr.ref.update({
+            stories: updateSelectedStory(),
+          });
         });
-      });
-    setTask("");
-    closeModal();
+      setTask("");
+      closeModal();
+    }
   };
   return (
     <Modal closeModal={closeModal} headerMessage="Add Task">
@@ -38,8 +44,12 @@ const AddTaskModal = ({ closeModal, projectId, stories, selectedStoryId }) => {
         <label>
           Task: <br />
           <input
+            className={taskErr ? "error-inp" : ""}
             value={task}
-            onChange={(e) => setTask(e.target.value)}
+            onChange={(e) => {
+              setTask(e.target.value);
+              setTaskErr(false);
+            }}
             placeholder="Add a task"
           />
         </label>
@@ -51,6 +61,7 @@ const AddTaskModal = ({ closeModal, projectId, stories, selectedStoryId }) => {
         >
           Add
         </button>
+        {taskErr ? <span className="input-err-msg">{ERR_MESSAGE}</span> : <></>}
       </form>
     </Modal>
   );

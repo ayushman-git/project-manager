@@ -25,6 +25,7 @@ label {
   color: #484848;
   font-weight: bold;
   font-size: 0.8rem;
+  position: relative;
 }
 
 input {
@@ -153,9 +154,22 @@ form {
 }
 
 td {
-  max-width: 18rem;
+  max-width: 4rem;
 }
 
 .error-inp {
   box-shadow: inset 0px 0px 0px 1px $failureColor;
+}
+
+.input-err-msg {
+  position: absolute;
+  left: 12px;
+  bottom: -10px;
+  color: $failureColor;
+  font-weight: bold;
+  font-size: 0.7rem;
+}
+
+form {
+  position: relative;
 }

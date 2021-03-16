@@ -14,7 +14,7 @@ import SetTheme from "../../../../components/SetTheme/SetTheme";
 import Navbar from "../../../../components/Navbar/Navbar";
 import DueDate from "../../../../components/DueDate/DueDate";
 import Shortcuts from "../../../../components/Shortcuts/Shortcuts";
-import Modal from "../../../../components/Modal/Modal";
+import AddShortcutModal from "../../../../components/AddShortcutModal/AddShortcutModal";
 import ScrumBoard from "../../../../components/ScrumBoard/ScrumBoard";
 import DelModal from "../../../../components/ScrumBoard/DelModal/DelModal";
 import TasksCompleted from "../../../../components/Event/TasksCompleted";
@@ -22,8 +22,7 @@ import StoriesCompleted from "../../../../components/Event/StoriesCompleted";
 
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
-  const [shortcutUrl, setShortcutUrl] = useState("");
-  const [platform, setPlatform] = useState("other");
+
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
   const [toggleProjectDel, setToggleProjectDel] = useState(false);
   const [toggleProjectArchive, setToggleProjectArchive] = useState(false);
@@ -103,8 +102,7 @@ export default function project({ session }) {
     ref.current.focus();
   };
 
-  const updateShortcuts = (e) => {
-    e.preventDefault();
+  const updateShortcuts = (shortcutUrl, platform) => {
     db.collection("projects")
       .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
       .get()
@@ -123,8 +121,7 @@ export default function project({ session }) {
           });
         }
       });
-    setPlatform("other");
-    setShortcutUrl("");
+
     setToggleAddShortcut(false);
   };
 
@@ -249,43 +246,10 @@ export default function project({ session }) {
 
   if (toggleAddShortcut) {
     addShortcutModal = (
-      <Modal
+      <AddShortcutModal
         closeModal={() => setToggleAddShortcut(false)}
-        headerMessage="Add Shortcut"
-      >
-        <form>
-          <label>
-            Platform: <br />
-            <select
-              className="dropdown-input"
-              value={platform}
-              onChange={(e) => setPlatform(e.target.value)}
-            >
-              <option value="other">Other</option>
-              <option value="trello">Trello</option>
-              <option value="figma">Figma</option>
-              <option value="xd">Adobe XD</option>
-              <option value="firebase">Firebase</option>
-            </select>
-            <br />
-          </label>
-          <label>
-            URL: <br />
-            <input
-              type="text"
-              value={shortcutUrl}
-              onChange={(e) => setShortcutUrl(e.target.value)}
-            />
-          </label>
-          <button
-            className="success-btn"
-            style={{ float: "right" }}
-            onClick={updateShortcuts}
-          >
-            Submit
-          </button>
-        </form>
-      </Modal>
+        updateShortcuts={updateShortcuts}
+      />
     );
   }
 
@@ -430,7 +394,6 @@ export default function project({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
-    console.log(cookies);
     const token = await verifyIdToken(cookies.tknCookies);
     const db = firebase.firestore();
 
