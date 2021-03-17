@@ -19,13 +19,20 @@ export default function DueDate({ days, projectId }) {
       });
     setShowInput(false);
   };
+  let msg = "";
+  if (days < 0) {
+    msg = `${Math.abs(days)} ${days === -1 ? "Day" : "Days"} Past`;
+  }
+  if (days > 0) {
+    msg = `${days} ${days === 1 ? "Day" : "Days"} Left`;
+  }
   return (
     <div className={styles.dateWrap}>
       <div
         onClick={() => setShowInput((prev) => !prev)}
         className={styles.dueCard}
       >
-        {days} Days Left
+        {msg}
       </div>
       {showInput && projectId && <input type="date" onBlur={changeDate} />}
     </div>

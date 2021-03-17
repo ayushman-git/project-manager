@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useSpring, animated } from "react-spring";
 import useDaysLeft from "../../../../hooks/useDaysLeft";
+import useChangeStatus from "../../../../hooks/useChangeStatus";
 
 import styles from "./index.module.scss";
 
@@ -21,6 +22,7 @@ import DelModal from "../../../../components/ScrumBoard/DelModal/DelModal";
 import TasksCompleted from "../../../../components/Event/TasksCompleted";
 import StoriesCompleted from "../../../../components/Event/StoriesCompleted";
 import Loader from "../../../../components/Loader/Loader";
+import Status from "../../../../components/Status/Status";
 
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
@@ -142,28 +144,6 @@ export default function project({ session }) {
       });
   };
 
-  const changeActiveStatus = async () => {
-    if (projectDetail.active) {
-      return;
-    }
-
-    let query = firebase.firestore().collection("projects");
-    query = query.where("userId", "==", session.uid);
-    query = query.where("active", "==", true);
-
-    const docs = await Promise.all([
-      query.get(),
-      db
-        .collection("projects")
-        .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-        .get(),
-    ]);
-    const alreadyActive = docs[0];
-    const toBeActive = docs[1];
-    alreadyActive.docs[0].ref.update({ active: false });
-    toBeActive.docs[0].ref.update({ active: true });
-  };
-
   const delProject = async () => {
     if (projectDetail.active) {
       let query = db.collection("projects");
@@ -281,15 +261,11 @@ export default function project({ session }) {
           />
         </div>
         <div className={styles.headerRight}>
-          <Image
-            src={
-              projectDetail.active
-                ? "/images/star-fill.svg"
-                : "/images/star.svg"
+          <Status
+            active={projectDetail.active}
+            changeActiveStatus={() =>
+              useChangeStatus(projectDetail.active, session.uid, projectId)
             }
-            width={20}
-            height={20}
-            onClick={changeActiveStatus}
           />
           <SetTheme
             currentTheme={projectDetail.theme}
