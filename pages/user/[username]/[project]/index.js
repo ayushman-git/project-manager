@@ -287,7 +287,7 @@ export default function project({ session }) {
           )}
 
           <Image
-            src="/images/plus.svg"
+            src="/images/plus-white.svg"
             width={15}
             height={15}
             className={styles.addShortcut}
@@ -317,11 +317,12 @@ export default function project({ session }) {
     );
     projectView = (
       <section className={styles.projectWrap}>
-        {header}
-        {info}
-        {addShortcutModal}
-        <hr className={styles.divider} />
-        <h2 style={{ textAlign: "center" }}>Scrum Board</h2>
+        <div className={styles.projectInfo}>
+          {header}
+          {info}
+          {addShortcutModal}
+        </div>
+        <h2 style={{ textAlign: "center", marginTop: "4rem" }}>Scrum Board</h2>
         <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
         {projectButtons}
       </section>

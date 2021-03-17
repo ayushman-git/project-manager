@@ -101,7 +101,6 @@ export default function User({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
-    console.log(cookies.tknCookies);
     const token = await verifyIdToken(cookies.tknCookies);
     return {
       props: {

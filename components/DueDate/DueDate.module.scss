@@ -1,11 +1,12 @@
 .dueCard {
   border-radius: 50px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
   padding: 0.4rem 1rem;
   display: inline-block;
   font-size: 0.8rem;
   user-select: none;
   transition: 0.4s ease-in-out all;
+  position: relative;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.8);
 }
@@ -21,4 +22,12 @@
 
 .dateWrap input[date] {
   position: absolute;
+}
+
+.dateWrap input[type="date"] {
+  position: absolute;
+  left: 0;
+  bottom: -4rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: black;
 }

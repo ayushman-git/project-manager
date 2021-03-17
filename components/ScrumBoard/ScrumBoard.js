@@ -158,7 +158,7 @@ const ScrumBoard = ({ stories, projectId }) => {
           <tr>
             <td className={styles.add}>
               <div onClick={() => setToggleStoryModal(true)}>
-                <Image src="/images/plus.svg" height={25} width={25} />
+                <Image src="/images/plus-white.svg" height={25} width={25} />
               </div>
             </td>
           </tr>
