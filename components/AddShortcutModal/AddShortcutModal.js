@@ -11,10 +11,8 @@ const AddShortcutModal = ({ closeModal, updateShortcuts }) => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    if (!shortcutUrlErr) {
-      if (!shortcutUrlErr) {
-        setShortcutUrlErr(true);
-      }
+    if (!shortcutUrl) {
+      setShortcutUrlErr(true);
     } else {
       updateShortcuts(shortcutUrl, platform);
       setPlatform("other");

@@ -10,8 +10,21 @@ import Todos from "../Todos/Todos";
 import TasksCompleted from "../Event/TasksCompleted";
 import StoriesCompleted from "../Event/StoriesCompleted";
 
+const calc = (x, y) => [
+  -(y - window.innerHeight / 2) / 80,
+  (x - window.innerWidth / 2) / 80,
+  1.05,
+];
+const trans = (x, y, s) =>
+  `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
+
 const ProjectOverviewMain = ({ project }) => {
   let sortedTasks = [];
+  const router = useRouter();
+  const [hoverAnimation, set] = useSpring(() => ({
+    xys: [0, 0, 1],
+    config: { mass: 5, tension: 350, friction: 40 },
+  }));
   (function sortTasks() {
     let idle = [];
     project.stories?.forEach((story) => {
@@ -22,7 +35,6 @@ const ProjectOverviewMain = ({ project }) => {
     });
     sortedTasks = [...sortedTasks, ...idle];
   })();
-  const router = useRouter();
   const handleOverciewClick = (e) => {
     if (e.target.nodeName !== "IMG") {
       router.push({
@@ -45,11 +57,9 @@ const ProjectOverviewMain = ({ project }) => {
     from: {
       opacity: 0,
       transform: "translateY(40px) scale(0.8)",
-      perspective: 500,
     },
     opacity: 1,
     transform: "translateY(0px) scale(1)",
-    perspective: 0,
   });
   const imageTransition = useSpring({
     from: {
@@ -62,14 +72,16 @@ const ProjectOverviewMain = ({ project }) => {
 
   return (
     <animated.section
-      style={onMountTransition}
       onClick={handleOverciewClick}
       className={styles.projectCard}
-      // style={{
-      //   background: `linear-gradient(-45deg, ${project.theme[0]}, ${project.theme[1]})`,
-      // }}
+      onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
+      onMouseLeave={() => set({ xys: [0, 0, 1] })}
+      style={{
+        transform: hoverAnimation.xys.interpolate(trans),
+        // ...onMountTransition,
+      }}
     >
-      <article className={styles.leftBar}>
+      <animated.article className={styles.leftBar}>
         <header className={styles.cardHeader}>
           <h2>
             {project.projectName}
@@ -89,7 +101,7 @@ const ProjectOverviewMain = ({ project }) => {
             </aside>
           )}
         </section>
-      </article>
+      </animated.article>
       <article className={styles.rightBar}>
         {sortedTasks.length > 0 && (
           <div>

@@ -10,12 +10,11 @@
 
 .add {
   margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
 }
 
-.add > div {
+.addStory {
   width: 1.2rem;
   height: 1.2rem;
   padding: 0.4rem;
