@@ -13,6 +13,7 @@ import Navbar from "../../../components/Navbar/Navbar";
 import ProjectOverviewMain from "../../../components/ProjectOverviewMain/ProjectOverviewMain";
 import AddProjectFAB from "../../../components/AddProjectFAB/AddProjectFAB";
 import AddProjectModal from "../../../components/AddProjectModal/AddProjectModal";
+import Loader from "../../../components/Loader/Loader";
 
 export default function User({ session }) {
   const [projects, setProjects] = useState([]);
@@ -74,20 +75,14 @@ export default function User({ session }) {
     const inActiveProjects = projects.filter((pr) => !pr.active);
     view = (
       <div>
-        <ProjectOverviewMain project={activeProject} />
+        <div style={{ marginTop: "2rem" }}>
+          <ProjectOverviewMain project={activeProject} />
+        </div>
         {inActiveProjects && <Projects projects={inActiveProjects} />}
       </div>
     );
   } else if (loading) {
-    view = (
-      <div className="loader">
-        <div className="spinner">
-          <div className="bounce1"></div>
-          <div className="bounce2"></div>
-          <div className="bounce3"></div>
-        </div>
-      </div>
-    );
+    view = <Loader />;
   }
 
   return (
@@ -106,6 +101,7 @@ export default function User({ session }) {
 export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
+    console.log(cookies.tknCookies);
     const token = await verifyIdToken(cookies.tknCookies);
     return {
       props: {
@@ -113,7 +109,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (err) {
-    console.log("err");
+    console.log(err, "user page");
     context.res.writeHead(302, { Location: "/" });
     context.res.end();
     return {

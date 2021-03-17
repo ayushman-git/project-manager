@@ -21,9 +21,9 @@ const Home = () => {
     logInWithProvider(provider);
   };
 
-  useEffect(() => {
-    Cookies.remove("tknCookies");
-  }, []);
+  // useEffect(() => {
+  //   Cookies.remove("tknCookies");
+  // }, []);
 
   const logInWithProvider = (provider) => {
     firebase

@@ -11,7 +11,7 @@ export default function PreviousButton() {
   };
   return (
     <div className={styles.previousButtonWrap} onClick={goBack}>
-      <Image src="/images/previous.svg" width={20} height={20} />
+      <Image src="/images/previous.svg" width={14} height={14} />
     </div>
   );
 }

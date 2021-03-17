@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         Cookies.remove("tknCookies", { path: "/" });
         return;
       }
-      const token = await user.getIdToken();
+      const token = await user.getIdToken(true);
       setUser(user);
       nookies.set(undefined, "tknCookies", token, {
         path: "/",

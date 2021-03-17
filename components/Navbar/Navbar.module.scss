@@ -2,16 +2,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.6rem 0;
+  padding: 1.2rem 0;
   position: relative;
   color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navImgWrap {
   border-radius: 50%;
   overflow: hidden;
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   position: relative;
   cursor: pointer;
   transition: 0.4s ease-in-out all;
@@ -43,6 +44,7 @@
 .logoNavWrap {
   display: flex;
   align-items: center;
+  user-select: none;
 }
 
 .logoNavWrap *:last-child {

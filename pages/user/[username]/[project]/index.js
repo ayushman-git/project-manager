@@ -6,6 +6,7 @@ import firebaseClient from "../../../../auth/firebaseClient";
 import firebase from "firebase";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useSpring, animated } from "react-spring";
 import useDaysLeft from "../../../../hooks/useDaysLeft";
 
 import styles from "./index.module.scss";
@@ -19,10 +20,10 @@ import ScrumBoard from "../../../../components/ScrumBoard/ScrumBoard";
 import DelModal from "../../../../components/ScrumBoard/DelModal/DelModal";
 import TasksCompleted from "../../../../components/Event/TasksCompleted";
 import StoriesCompleted from "../../../../components/Event/StoriesCompleted";
+import Loader from "../../../../components/Loader/Loader";
 
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
-
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
   const [toggleProjectDel, setToggleProjectDel] = useState(false);
   const [toggleProjectArchive, setToggleProjectArchive] = useState(false);
@@ -35,7 +36,7 @@ export default function project({ session }) {
   const tagRef = useRef();
 
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
-  let projectView = <h1>Loading...</h1>;
+  let projectView = <Loader />;
   let addShortcutModal;
   useEffect(() => {
     let cancelled = false;
@@ -252,7 +253,6 @@ export default function project({ session }) {
       />
     );
   }
-
   if (Object.keys(projectDetail).length > 0) {
     const header = (
       <header className={styles.header}>
@@ -344,28 +344,25 @@ export default function project({ session }) {
         {header}
         {info}
         {addShortcutModal}
-      </section>
-    );
-  }
-
-  return (
-    <div
-      className={styles.wrap}
-      style={
-        Object.keys(projectDetail).length > 0
-          ? {
-              background: `linear-gradient(-45deg, ${projectDetail.theme[0]}, ${projectDetail.theme[1]})`,
-            }
-          : {}
-      }
-    >
-      <div className="maxWidth" style={{ minHeight: "100vh" }}>
-        <Navbar image={session.picture} />
-        {projectView}
         <hr className={styles.divider} />
         <h2 style={{ textAlign: "center" }}>Scrum Board</h2>
         <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
         {projectButtons}
+      </section>
+    );
+  }
+  const bgTransition = useSpring({
+    background: projectDetail.theme
+      ? `linear-gradient(-45deg, ${projectDetail.theme[0]}, ${projectDetail.theme[1]})`
+      : `linear-gradient(-45deg, #000000, #130F40)`,
+  });
+
+  return (
+    <animated.div className={styles.wrap} style={bgTransition}>
+      <div className="maxWidth" style={{ minHeight: "100vh" }}>
+        <Navbar image={session.picture} />
+        {projectView}
+
         {toggleProjectDel && (
           <DelModal
             closeModal={() => setToggleProjectDel(false)}
@@ -387,7 +384,7 @@ export default function project({ session }) {
           />
         )}
       </div>
-    </div>
+    </animated.div>
   );
 }
 
@@ -412,7 +409,7 @@ export async function getServerSideProps(context) {
       props: { session: token },
     };
   } catch (err) {
-    console.log(err);
+    console.log(err, "project page");
     context.res.writeHead(302, { Location: "/" });
     context.res.end();
     return {

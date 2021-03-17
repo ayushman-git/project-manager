@@ -2,32 +2,33 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import firebase from "firebase";
-import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { useSpring, animated } from "react-spring";
 
 import clickOutside from "../../hooks/clickOutside";
 
 import PreviousButton from "../PreviousButton/PreviousButton";
 
 export default function Navbar({ image }) {
-  let signout;
-  let goBack;
+  let signout, goBack, logoTransition;
   const ref = useRef();
   const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const backTransition = useSpring({
+    from: { transform: "translateX(-20px) scale(0.6)", opacity: 0 },
+    transform: "translateX(0px) scale(1)",
+    opacity: 1,
+  });
 
   clickOutside(ref, () => {
     if (showDropdown) {
       setShowDropdown((prev) => !prev);
     }
   });
-  const toggleSignout = () => {
-    setShowDropdown((prev) => !prev);
-  };
 
   const signOut = async () => {
     await firebase.auth().signOut();
-    Cookies.remove("tknCookies");
     router.push("/");
   };
 
@@ -40,18 +41,29 @@ export default function Navbar({ image }) {
   }
 
   if (router.query?.project) {
-    goBack = <PreviousButton />;
+    goBack = (
+      <animated.div style={backTransition}>
+        <PreviousButton />
+      </animated.div>
+    );
+    logoTransition = useSpring({
+      from: { transform: "translateX(-20px)" },
+      transform: "translateX(0px)",
+    });
   }
 
   return (
     <nav className={styles.navWrap}>
       <strong className={styles.logoNavWrap}>
         {goBack}
-        <span>LOGO</span>
+        <animated.span style={undefined ?? logoTransition}>PROTO</animated.span>
       </strong>
       <div ref={ref}>
-        <div className={styles.navImgWrap} onClick={toggleSignout}>
-          <Image className={styles.navImg} src={image} width={40} height={40} />
+        <div
+          className={styles.navImgWrap}
+          onClick={() => setShowDropdown((prev) => !prev)}
+        >
+          <Image className={styles.navImg} src={image} width={30} height={30} />
         </div>
         {signout}
       </div>
