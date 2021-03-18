@@ -15,10 +15,15 @@ export const AuthProvider = ({ children }) => {
       if (!user) {
         setUser(null);
         Cookies.remove("tknCookies", { path: "/" });
+        Cookies.remove("user", { path: "/" });
         return;
       }
       const token = await user.getIdToken(true);
       setUser(user);
+      nookies.set(undefined, "user", user.displayName, {
+        path: "/",
+        maxAge: 3600,
+      });
       nookies.set(undefined, "tknCookies", token, {
         path: "/",
         maxAge: 3600,

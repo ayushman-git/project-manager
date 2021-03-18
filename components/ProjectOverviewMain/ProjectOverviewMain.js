@@ -27,7 +27,7 @@ const ProjectOverviewMain = ({ project }) => {
   }));
   (function sortTasks() {
     let idle = [];
-    project.stories?.forEach((story) => {
+    project?.stories?.forEach((story) => {
       const doing = story?.tasks.filter((task) => task.type === "doing");
       const innerIdle = story?.tasks.filter((task) => task.type === "idle");
       idle = [...idle, ...innerIdle];

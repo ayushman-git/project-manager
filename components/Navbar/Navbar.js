@@ -10,11 +10,16 @@ import clickOutside from "../../hooks/clickOutside";
 import PreviousButton from "../PreviousButton/PreviousButton";
 
 export default function Navbar({ image }) {
-  let signout, goBack, logoTransition;
-  const ref = useRef();
-  const router = useRouter();
+  //State
   const [showDropdown, setShowDropdown] = useState(false);
 
+  //Refs
+  const ref = useRef();
+  const router = useRouter();
+
+  let signout, goBack, logoTransition;
+
+  //Spring animation
   const backTransition = useSpring({
     from: { transform: "translateX(-20px) scale(0.6)", opacity: 0 },
     transform: "translateX(0px) scale(1)",
@@ -63,7 +68,12 @@ export default function Navbar({ image }) {
           className={styles.navImgWrap}
           onClick={() => setShowDropdown((prev) => !prev)}
         >
-          <Image className={styles.navImg} src={image} width={30} height={30} />
+          <Image
+            className={styles.navImg}
+            src={image ? image : "/images/default-profile.svg"}
+            width={30}
+            height={30}
+          />
         </div>
         {signout}
       </div>

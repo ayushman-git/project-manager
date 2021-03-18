@@ -1,13 +1,15 @@
 import Image from "next/image";
+import { useEffect } from "react";
 import styles from "./index.module.scss";
 import firebase from "firebase/app";
 import "firebase/auth";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
+import nookies from "nookies";
+import { userAuth } from "../auth/auth";
 
 const Home = () => {
   const router = useRouter();
+  const { user } = userAuth();
   const loginViaGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     logInWithProvider(provider);
@@ -21,20 +23,19 @@ const Home = () => {
     logInWithProvider(provider);
   };
 
-  // useEffect(() => {
-  //   Cookies.remove("tknCookies");
-  // }, []);
+  useEffect(() => {
+    if (user) {
+      router.push("/user/" + user.displayName.split(" ")[0].toLowerCase());
+    }
+  }, [user]);
 
   const logInWithProvider = (provider) => {
     firebase
       .auth()
       .signInWithPopup(provider)
-      .then((result) => {
-        const credential = result.credential;
-        const token = credential.accessToken;
-        const user = result.user;
-        router.push("/user/" + user.displayName.split(" ")[0].toLowerCase());
-      })
+      // .then(({ user }) => {
+      //   router.push("/user/" + user.displayName.split(" ")[0].toLowerCase());
+      // })
       .catch((error) => {
         console.log(error);
       });
@@ -91,5 +92,19 @@ const Home = () => {
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const { user } = cookies;
+  if (user) {
+    context.res.setHeader(
+      "location",
+      `/user/${user.split(" ")[0].toLowerCase()}`
+    );
+    context.res.statusCode = 302;
+    return { props: {} };
+  }
+  return { props: {} };
+}
 
 export default Home;

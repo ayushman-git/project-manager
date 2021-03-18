@@ -388,7 +388,6 @@ export async function getServerSideProps(context) {
   } catch (err) {
     console.log(err, "project page");
     context.res.writeHead(302, { Location: "/" });
-    context.res.end();
     return {
       props: {},
     };
