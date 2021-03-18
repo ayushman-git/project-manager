@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import { useSpring, animated } from "react-spring";
 
 import DelModal from "../DelModal/DelModal";
 import styles from "./Tasks.module.scss";
@@ -20,9 +21,21 @@ const Tasks = ({ tasks, type, changeStatusClick, storyId, delTask }) => {
     }
   };
 
+  const taskTransition = useSpring({
+    from: {
+      transform: `translateX(-50px) scale(0.9) rotate(5deg)`,
+      opacity: 0,
+    },
+    transform: "translateX(0px) scale(1) rotate(0deg)",
+    opacity: 1,
+  });
+
+  console.log(taskTransition);
+
   if (tasks) {
     displayTasks = tasks.map((task) => (
-      <li
+      <animated.li
+        style={taskTransition}
         key={task.id}
         className={`${styles.taskCard} card`}
         onMouseDown={(e) => middleMouseHandler(e, task.id)}
@@ -55,7 +68,7 @@ const Tasks = ({ tasks, type, changeStatusClick, storyId, delTask }) => {
             message="Delete Task?"
           />
         )}
-      </li>
+      </animated.li>
     ));
   }
   return <ul className={styles.cardList}>{displayTasks}</ul>;

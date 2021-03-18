@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useSpring, animated } from "react-spring";
 import Image from "next/image";
 
 import DelModal from "../DelModal/DelModal";
@@ -27,9 +28,14 @@ const StoryCard = ({ story, selectedStory, delStory, updateStory }) => {
       e.preventDefault();
     }
   };
+  const storyTransition = useSpring({
+    from: { transform: "translateX(-30px) scale(0.7)" },
+    transform: "translateX(0) scale(1)",
+  });
   return (
     <>
-      <section
+      <animated.section
+        style={storyTransition}
         className={`${styles.storyCard} card`}
         onMouseDown={middleMouseHandler}
       >
@@ -50,7 +56,7 @@ const StoryCard = ({ story, selectedStory, delStory, updateStory }) => {
             width={15}
           />
         </aside>
-      </section>
+      </animated.section>
       {toggleStoryDelModal && (
         <DelModal
           closeModal={() => setToggleStoryDelModal(false)}
