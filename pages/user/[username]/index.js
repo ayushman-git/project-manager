@@ -1,51 +1,34 @@
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import React, { useState } from "react";
 import { verifyIdToken } from "../../../auth/firebaseAdmin";
 import firebaseClient from "../../../auth/firebaseClient";
-import firebase from "firebase";
 import nookies from "nookies";
 
 import styles from "./index.module.scss";
 
-import useDaysLeft from "../../../hooks/useDaysLeft";
+import useGetProjects from "../../../hooks/useGetProjects";
+
 import Projects from "../../../components/Projects/Projects";
 import Navbar from "../../../components/Navbar/Navbar";
 import ProjectOverviewMain from "../../../components/ProjectOverviewMain/ProjectOverviewMain";
 import AddProjectFAB from "../../../components/AddProjectFAB/AddProjectFAB";
 import AddProjectModal from "../../../components/AddProjectModal/AddProjectModal";
 import Loader from "../../../components/Loader/Loader";
+import EmptyScreen from "../../../components/EmptyScreen/EmptyScreen";
 
 export default function User({ session }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
+
   let view, addProjectModal, emptyScreen;
-  const db = firebase.firestore();
+
   firebaseClient();
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    (async () => {
-      let query = db.collection("projects");
-      query = query.where("userId", "==", session.uid);
-      query = query.where("archive", "==", false);
-      query.onSnapshot((snapshotOfProjects) => {
-        const projects = [];
-        snapshotOfProjects.forEach((doc) => {
-          projects.push({
-            ...doc.data(),
-            projectId: doc.id,
-            dueDate: useDaysLeft(doc.data().dueDate),
-          });
-        });
-        if (!cancelled) {
-          setProjects(projects);
-          setLoading(false);
-        }
-      });
-    })();
-    return () => (cancelled = true);
-  }, []);
+
+  (async () => {
+    const [projects, loading] = await useGetProjects(session.uid);
+    setProjects(projects);
+    setLoading(loading);
+  })();
 
   if (showAddProjectModal) {
     addProjectModal = (
@@ -58,19 +41,10 @@ export default function User({ session }) {
   }
 
   if (!projects.length && !loading) {
-    emptyScreen = (
-      <div className={styles.emptyDiv}>
-        <Image
-          src={`/images/illustrations/i_${Math.floor(Math.random() * 7)}.svg`}
-          height={300}
-          width={300}
-        />
-        <h2>Add Projects</h2>
-      </div>
-    );
+    emptyScreen = <EmptyScreen />;
   }
 
-  if (session && projects.length) {
+  if (projects.length) {
     const activeProject = projects.find((pr) => pr.active);
     const inActiveProjects = projects.filter((pr) => !pr.active);
     view = (
