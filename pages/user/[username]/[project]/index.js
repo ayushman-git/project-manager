@@ -1,16 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
 import nookies from "nookies";
 import { verifyIdToken } from "../../../../auth/firebaseAdmin";
+import { useRouter } from "next/router";
+import { useSpring, animated } from "react-spring";
 import firebaseClient from "../../../../auth/firebaseClient";
 import firebase from "firebase";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import { useSpring, animated } from "react-spring";
-import useDaysLeft from "../../../../hooks/useDaysLeft";
-import useChangeStatus from "../../../../hooks/useChangeStatus";
 
 import styles from "./index.module.scss";
+
+import useChangeStatus from "../../../../hooks/useChangeStatus";
+import useDaysLeft from "../../../../hooks/useDaysLeft";
+import useUpdateFirestore from "../../../../hooks/useUpdateFirestore";
+import useMakeElEditable from "../../../../hooks/useMakeElEditable";
+import useUpdateShortcuts from "../../../../hooks/useUpdateShortcuts";
+import useDelProject from "../../../../hooks/useDelProject";
+import useDelShortcut from "../../../../hooks/useDelShortcut";
 
 import SetTheme from "../../../../components/SetTheme/SetTheme";
 import Navbar from "../../../../components/Navbar/Navbar";
@@ -23,6 +28,7 @@ import TasksCompleted from "../../../../components/Event/TasksCompleted";
 import StoriesCompleted from "../../../../components/Event/StoriesCompleted";
 import Loader from "../../../../components/Loader/Loader";
 import Status from "../../../../components/Status/Status";
+import ProjectModify from "../../../../components/ProjectModify/ProjectModify";
 
 export default function project({ session }) {
   const [projectDetail, setProjectDetail] = useState({});
@@ -40,6 +46,7 @@ export default function project({ session }) {
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <Loader />;
   let addShortcutModal;
+
   useEffect(() => {
     let cancelled = false;
     if (router.query?.projectId) {
@@ -66,122 +73,16 @@ export default function project({ session }) {
   }, []);
 
   let projectButtons = (
-    <div className={styles.buttonWrap}>
-      <button
-        className="secondary-btn"
-        onMouseDown={() => {
-          setToggleProjectDel(true);
-        }}
-      >
-        Delete
-      </button>
-      <button
-        className="success-btn"
-        onMouseDown={() => {
-          setToggleProjectArchive(true);
-        }}
-      >
-        Complete
-      </button>
-    </div>
+    <ProjectModify
+      delToggle={() => setToggleProjectDel(true)}
+      archiveToggle={() => setToggleProjectArchive(true)}
+    />
   );
 
-  const updateFirestore = (e, ref, field) => {
-    const newData = e.currentTarget.textContent;
-    db.collection("projects")
-      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-      .get()
-      .then((query) => {
-        const pr = query.docs[0];
-        pr.ref.update({
-          [field]: newData,
-        });
-      });
-    ref.current.contentEditable = false;
-  };
-
-  const makeEditable = (e, ref) => {
-    ref.current.contentEditable = true;
-    ref.current.focus();
-  };
-
-  const updateShortcuts = (shortcutUrl, platform) => {
-    db.collection("projects")
-      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-      .get()
-      .then((query) => {
-        const pr = query.docs[0];
-        if (projectDetail.shortcuts) {
-          pr.ref.update({
-            shortcuts: [
-              ...projectDetail.shortcuts,
-              { platform, url: shortcutUrl, id: uuidv4() },
-            ],
-          });
-        } else {
-          pr.ref.update({
-            shortcuts: [{ platform, url: shortcutUrl, id: uuidv4() }],
-          });
-        }
-      });
-
-    setToggleAddShortcut(false);
-  };
-
-  const delShortcutHandler = (e, id) => {
-    const updatedShortcuts = projectDetail.shortcuts.filter(
-      (project) => project.id !== id
-    );
-
-    db.collection("projects")
-      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-      .get()
-      .then((query) => {
-        const pr = query.docs[0];
-        pr.ref.update({
-          shortcuts: updatedShortcuts,
-        });
-      });
-  };
-
-  const delProject = async () => {
-    if (projectDetail.active) {
-      let query = db.collection("projects");
-      query = query.where("userId", "==", session.uid);
-      query = query.where("active", "==", false);
-      query = query.where("archive", "==", false);
-      const docs = await Promise.all([
-        query.get(),
-        db
-          .collection("projects")
-          .where(
-            firebase.firestore.FieldPath.documentId(),
-            "==",
-            projectDetail.projectId
-          )
-          .get(),
-      ]);
-      const makeItActive = docs[0];
-      const deleteThisDoc = docs[1];
-      if (makeItActive.docs.length) {
-        makeItActive.docs[0].ref.update({ active: true });
-      }
-      deleteThisDoc.docs[0].ref.delete();
-    } else {
-      db.collection("projects")
-        .where(
-          firebase.firestore.FieldPath.documentId(),
-          "==",
-          projectDetail.projectId
-        )
-        .get()
-        .then((query) => {
-          const pr = query.docs[0];
-          pr.ref.delete();
-        });
-    }
-
+  const delProject = () => {
+    useDelProject(projectDetail.active, projectId, session.uid);
     router.back();
+    setToggleProjectDel(false);
   };
 
   const archiveProject = async () => {
@@ -229,7 +130,15 @@ export default function project({ session }) {
     addShortcutModal = (
       <AddShortcutModal
         closeModal={() => setToggleAddShortcut(false)}
-        updateShortcuts={updateShortcuts}
+        updateShortcuts={(shortcutUrl, platform) =>
+          useUpdateShortcuts(
+            projectDetail.shortcuts,
+            shortcutUrl,
+            platform,
+            projectId,
+            setToggleAddShortcut
+          )
+        }
       />
     );
   }
@@ -239,8 +148,10 @@ export default function project({ session }) {
         <div className={styles.titleWithAddOns}>
           <h1
             ref={titleRef}
-            onDoubleClick={(e) => makeEditable(e, titleRef)}
-            onBlur={(e) => updateFirestore(e, titleRef, "projectName")}
+            onDoubleClick={() => useMakeElEditable(titleRef)}
+            onBlur={(e) =>
+              useUpdateFirestore(e, titleRef, "projectName", projectId)
+            }
           >
             {projectDetail.projectName}
           </h1>
@@ -248,8 +159,8 @@ export default function project({ session }) {
             #
             <span
               ref={tagRef}
-              onBlur={(e) => updateFirestore(e, tagRef, "tag")}
-              onDoubleClick={(e) => makeEditable(e, tagRef)}
+              onBlur={(e) => useUpdateFirestore(e, tagRef, "tag", projectId)}
+              onDoubleClick={() => useMakeElEditable(tagRef)}
             >
               {projectDetail.tag}
             </span>
@@ -282,7 +193,9 @@ export default function project({ session }) {
           {projectDetail.shortcuts && (
             <Shortcuts
               shortcuts={projectDetail.shortcuts}
-              delShortcut={delShortcutHandler}
+              delShortcut={(shortcutId) =>
+                useDelShortcut(projectDetail.shortcuts, shortcutId, projectId)
+              }
             />
           )}
 
@@ -298,8 +211,10 @@ export default function project({ session }) {
           <div
             className={styles.description}
             ref={descriptionRef}
-            onBlur={(e) => updateFirestore(e, descriptionRef, "description")}
-            onDoubleClick={(e) => makeEditable(e, descriptionRef)}
+            onBlur={(e) =>
+              useUpdateFirestore(e, descriptionRef, "description", projectId)
+            }
+            onDoubleClick={() => useMakeElEditable(descriptionRef)}
           >
             {projectDetail.description}
           </div>
@@ -343,10 +258,7 @@ export default function project({ session }) {
         {toggleProjectDel && (
           <DelModal
             closeModal={() => setToggleProjectDel(false)}
-            confirmDel={() => {
-              delProject();
-              setToggleProjectDel(false);
-            }}
+            confirmDel={delProject}
             message="Delete Project?"
           />
         )}

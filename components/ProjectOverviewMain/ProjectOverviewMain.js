@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useSpring, animated } from "react-spring";
+
+import useHoverCard from "../../hooks/useHoverCard";
 
 import styles from "./ProjectOverviewMain.module.scss";
 import DueDate from "../DueDate/DueDate";
@@ -10,21 +12,13 @@ import Todos from "../Todos/Todos";
 import TasksCompleted from "../Event/TasksCompleted";
 import StoriesCompleted from "../Event/StoriesCompleted";
 
-const calc = (x, y) => [
-  -(y - window.innerHeight / 2) / 80,
-  (x - window.innerWidth / 2) / 80,
-  1.05,
-];
-const trans = (x, y, s) =>
-  `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
-
 const ProjectOverviewMain = ({ project }) => {
-  let sortedTasks = [];
   const router = useRouter();
-  const [hoverAnimation, set] = useSpring(() => ({
-    xys: [0, 0, 1],
-    config: { mass: 5, tension: 350, friction: 40 },
-  }));
+
+  const [calc, trans] = useHoverCard();
+
+  let sortedTasks = [];
+
   (function sortTasks() {
     let idle = [];
     project?.stories?.forEach((story) => {
@@ -70,15 +64,30 @@ const ProjectOverviewMain = ({ project }) => {
     transform: "translateY(0px) scale(1)",
   });
 
+  const mouseMove = ({ clientX: x, clientY: y }) => {
+    set({ xys: calc(x, y) });
+  };
+
+  const [hoverAnimation, set] = useSpring(() => ({
+    from: {
+      opacity: 0,
+      transform: "translateY(40px) scale(0.8)",
+    },
+    opacity: 1,
+    transform: "translateY(0px) scale(1)",
+    xys: [0, 0, 1],
+    config: { mass: 5, tension: 350, friction: 40 },
+  }));
+
   return (
     <animated.section
       onClick={handleOverciewClick}
       className={styles.projectCard}
-      onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
+      onMouseMove={mouseMove}
       onMouseLeave={() => set({ xys: [0, 0, 1] })}
       style={{
         transform: hoverAnimation.xys.interpolate(trans),
-        // ...onMountTransition,
+        opacity: hoverAnimation.opacity.interpolate((o) => o),
       }}
     >
       <animated.article className={styles.leftBar}>
