@@ -4,16 +4,26 @@ import styles from "./AddProjectFAB.module.scss";
 import Image from "next/image";
 
 const AddProjectFAB = ({ FABClicked }) => {
-  const FABtransition = useSpring({
+  const [transition, setTransition] = useSpring(() => ({
     from: { transform: "scale(0.6) rotate(45deg)", opacity: 0 },
     transform: "scale(1) rotate(0deg)",
-    opacity: 1,
-  });
+    opacity: 0.6,
+  }));
+
+  const mouseHover = (isHover) => {
+    setTransition({
+      opacity: isHover ? 1 : 0.6,
+      transform: isHover ? `scale(1.1) rotate(-90deg)` : `scale(1) rotate(0)`,
+    });
+  };
+
   return (
     <animated.div
       className={styles.FABWrap}
       onClick={FABClicked}
-      style={FABtransition}
+      style={transition}
+      onMouseEnter={() => mouseHover(true)}
+      onMouseLeave={() => mouseHover(false)}
     >
       <Image
         src="/images/plus.svg"

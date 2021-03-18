@@ -4,6 +4,7 @@ module.exports = {
       "lh3.googleusercontent.com",
       "cdn.worldvectorlogo.com",
       "lh6.googleusercontent.com",
+      "avatars.githubusercontent.com",
     ],
   },
 };
