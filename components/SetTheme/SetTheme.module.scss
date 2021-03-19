@@ -11,5 +11,9 @@
 
 .gradientsWrap {
   display: flex;
+  margin-top: 2rem;
+  flex-flow: row wrap;
   gap: 2rem;
+  width: 34vw;
+  max-width: 50rem;
 }

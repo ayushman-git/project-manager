@@ -47,6 +47,15 @@ export default function project({ session }) {
   let projectView = <Loader />;
   let addShortcutModal;
 
+  const [projectInfoTransition, setProjectInfoTransition] = useSpring(() => ({
+    from: {
+      transform: "translateY(30px) scale(0.6)",
+      opacity: 0,
+    },
+    transform: "translateY(0px) scale(1)",
+    opacity: 1,
+  }));
+
   useEffect(() => {
     let cancelled = false;
     if (router.query?.projectId) {
@@ -232,11 +241,14 @@ export default function project({ session }) {
     );
     projectView = (
       <section className={styles.projectWrap}>
-        <div className={styles.projectInfo}>
+        <animated.div
+          className={styles.projectInfo}
+          style={projectInfoTransition}
+        >
           {header}
           {info}
           {addShortcutModal}
-        </div>
+        </animated.div>
         <h2 style={{ textAlign: "center", marginTop: "4rem" }}>Scrum Board</h2>
         <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
         {projectButtons}

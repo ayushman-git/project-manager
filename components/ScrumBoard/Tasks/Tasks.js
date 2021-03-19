@@ -30,8 +30,6 @@ const Tasks = ({ tasks, type, changeStatusClick, storyId, delTask }) => {
     opacity: 1,
   });
 
-  console.log(taskTransition);
-
   if (tasks) {
     displayTasks = tasks.map((task) => (
       <animated.li
