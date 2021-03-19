@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useSpring, animated } from "react-spring";
 
 import useHoverCard from "../../hooks/useHoverCard";
+import AddHoverAnimation from "../../HOCs/AddHoverAnimation";
 
 import styles from "./ProjectOverviewMain.module.scss";
 import DueDate from "../DueDate/DueDate";
@@ -47,14 +48,6 @@ const ProjectOverviewMain = ({ project }) => {
     return str;
   };
 
-  const onMountTransition = useSpring({
-    from: {
-      opacity: 0,
-      transform: "translateY(40px) scale(0.8)",
-    },
-    opacity: 1,
-    transform: "translateY(0px) scale(1)",
-  });
   const imageTransition = useSpring({
     from: {
       opacity: 0,
@@ -100,13 +93,19 @@ const ProjectOverviewMain = ({ project }) => {
         </header>
         {project?.shortcuts && <Shortcuts shortcuts={project.shortcuts} />}
         <section className={styles.mainWrap}>
-          <article className={styles.description}>
-            {reduceDescription(50, project.description)}
-          </article>
+          <AddHoverAnimation>
+            <article className={styles.description}>
+              {reduceDescription(50, project.description)}
+            </article>
+          </AddHoverAnimation>
           {project.stories?.length > 0 && (
             <aside className={styles.stats}>
-              <TasksCompleted stories={project.stories} />
-              <StoriesCompleted stories={project.stories} />
+              <AddHoverAnimation>
+                <TasksCompleted stories={project.stories} />
+              </AddHoverAnimation>
+              <AddHoverAnimation>
+                <StoriesCompleted stories={project.stories} />
+              </AddHoverAnimation>
             </aside>
           )}
         </section>

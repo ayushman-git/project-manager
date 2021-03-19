@@ -145,7 +145,7 @@ const ScrumBoard = ({ stories, projectId }) => {
   return (
     <>
       <table className={styles.table}>
-        <thead>
+        <thead className={styles.tableHead}>
           <tr>
             <th className={styles.stories}>Stories</th>
             <th>Idle</th>

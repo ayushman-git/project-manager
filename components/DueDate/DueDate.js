@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import firebase from "firebase";
 
 import clickOutside from "../../hooks/clickOutside";
+import AddHoverAnimation from "../../HOCs/AddHoverAnimation";
+
 import styles from "./DueDate.module.scss";
 
 export default function DueDate({ days, projectId }) {
@@ -43,12 +45,14 @@ export default function DueDate({ days, projectId }) {
   }
   return (
     <div className={styles.dateWrap} ref={ref}>
-      <div
-        onClick={() => setShowInput((prev) => !prev)}
-        className={styles.dueCard}
-      >
-        {msg}
-      </div>
+      <AddHoverAnimation>
+        <div
+          onClick={() => setShowInput((prev) => !prev)}
+          className={styles.dueCard}
+        >
+          {msg}
+        </div>
+      </AddHoverAnimation>
       {showInput && projectId && (
         <input
           type="date"

@@ -2,6 +2,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { useSpring, animated } from "react-spring";
 
+import AddHoverAnimation from "../../../HOCs/AddHoverAnimation";
+
 import DelModal from "../DelModal/DelModal";
 import styles from "./Tasks.module.scss";
 
@@ -32,41 +34,43 @@ const Tasks = ({ tasks, type, changeStatusClick, storyId, delTask }) => {
 
   if (tasks) {
     displayTasks = tasks.map((task) => (
-      <animated.li
-        style={taskTransition}
-        key={task.id}
-        className={`${styles.taskCard} card`}
-        onMouseDown={(e) => middleMouseHandler(e, task.id)}
-      >
-        {showLeftArrow && (
-          <Image
-            onClick={() => changeStatusClick(task.id, storyId, type, "left")}
-            src="/images/left.svg"
-            width={25}
-            height={25}
-            layout="fixed"
-          />
-        )}
-        <p>{task.task}</p>
-        {showRightArrow && (
-          <Image
-            onClick={() => changeStatusClick(task.id, storyId, type, "right")}
-            src="/images/right.svg"
-            width={25}
-            height={25}
-          />
-        )}
-        {toggleTaskDelModal && (
-          <DelModal
-            closeModal={() => setToggleTaskDelModal(false)}
-            confirmDel={() => {
-              delTask(selectedTaskId, storyId);
-              setToggleTaskDelModal(false);
-            }}
-            message="Delete Task?"
-          />
-        )}
-      </animated.li>
+      <AddHoverAnimation>
+        <animated.li
+          style={taskTransition}
+          key={task.id}
+          className={`${styles.taskCard} card`}
+          onMouseDown={(e) => middleMouseHandler(e, task.id)}
+        >
+          {showLeftArrow && (
+            <Image
+              onClick={() => changeStatusClick(task.id, storyId, type, "left")}
+              src="/images/left.svg"
+              width={25}
+              height={25}
+              layout="fixed"
+            />
+          )}
+          <p>{task.task}</p>
+          {showRightArrow && (
+            <Image
+              onClick={() => changeStatusClick(task.id, storyId, type, "right")}
+              src="/images/right.svg"
+              width={25}
+              height={25}
+            />
+          )}
+          {toggleTaskDelModal && (
+            <DelModal
+              closeModal={() => setToggleTaskDelModal(false)}
+              confirmDel={() => {
+                delTask(selectedTaskId, storyId);
+                setToggleTaskDelModal(false);
+              }}
+              message="Delete Task?"
+            />
+          )}
+        </animated.li>
+      </AddHoverAnimation>
     ));
   }
   return <ul className={styles.cardList}>{displayTasks}</ul>;

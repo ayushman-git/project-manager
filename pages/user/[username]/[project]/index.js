@@ -16,6 +16,7 @@ import useMakeElEditable from "../../../../hooks/useMakeElEditable";
 import useUpdateShortcuts from "../../../../hooks/useUpdateShortcuts";
 import useDelProject from "../../../../hooks/useDelProject";
 import useDelShortcut from "../../../../hooks/useDelShortcut";
+import AddHoverAnimation from "../../../../HOCs/AddHoverAnimation";
 
 import SetTheme from "../../../../components/SetTheme/SetTheme";
 import Navbar from "../../../../components/Navbar/Navbar";
@@ -46,15 +47,6 @@ export default function project({ session }) {
   let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <Loader />;
   let addShortcutModal;
-
-  const [projectInfoTransition, setProjectInfoTransition] = useSpring(() => ({
-    from: {
-      transform: "translateY(30px) scale(0.6)",
-      opacity: 0,
-    },
-    transform: "translateY(0px) scale(1)",
-    opacity: 1,
-  }));
 
   useEffect(() => {
     let cancelled = false;
@@ -229,26 +221,27 @@ export default function project({ session }) {
           </div>
 
           <aside className={styles.stats}>
-            <div className={`${styles.statCard} card`}>
-              <TasksCompleted stories={projectDetail.stories} />
-            </div>
-            <div className={`${styles.statCard} card`}>
-              <StoriesCompleted stories={projectDetail.stories} />
-            </div>
+            <AddHoverAnimation>
+              <div className={`${styles.statCard} card`}>
+                <TasksCompleted stories={projectDetail.stories} />
+              </div>
+            </AddHoverAnimation>
+            <AddHoverAnimation>
+              <div className={`${styles.statCard} card`}>
+                <StoriesCompleted stories={projectDetail.stories} />
+              </div>
+            </AddHoverAnimation>
           </aside>
         </div>
       </section>
     );
     projectView = (
       <section className={styles.projectWrap}>
-        <animated.div
-          className={styles.projectInfo}
-          style={projectInfoTransition}
-        >
+        <div className={styles.projectInfo}>
           {header}
           {info}
           {addShortcutModal}
-        </animated.div>
+        </div>
         <h2 style={{ textAlign: "center", marginTop: "4rem" }}>Scrum Board</h2>
         <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
         {projectButtons}

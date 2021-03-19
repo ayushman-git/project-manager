@@ -1,5 +1,6 @@
 .table {
   width: 100%;
+  border-collapse: collapse;
   padding: 2rem 0;
 }
 
@@ -21,4 +22,22 @@
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
+}
+
+.tableHead {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tableHead th {
+  padding: 1rem;
+}
+
+.table td,
+.table th {
+  // border: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: none;
+}
+
+.table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.06);
 }
