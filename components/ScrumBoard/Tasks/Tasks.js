@@ -34,10 +34,9 @@ const Tasks = ({ tasks, type, changeStatusClick, storyId, delTask }) => {
 
   if (tasks) {
     displayTasks = tasks.map((task) => (
-      <AddHoverAnimation>
+      <AddHoverAnimation key={task.id}>
         <animated.li
           style={taskTransition}
-          key={task.id}
           className={`${styles.taskCard} card`}
           onMouseDown={(e) => middleMouseHandler(e, task.id)}
         >

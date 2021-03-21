@@ -116,9 +116,7 @@ const ProjectOverviewMain = ({ project }) => {
             <header className={styles.rightBarHeader}>
               <h3>Tasks</h3>
             </header>
-            {sortedTasks.length > 0 && (
-              <Todos todos={sortedTasks.map((task) => task.task)} />
-            )}
+            {sortedTasks.length > 0 && <Todos todos={sortedTasks} />}
           </div>
         )}
         {sortedTasks.length === 0 && (

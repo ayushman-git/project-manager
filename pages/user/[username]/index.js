@@ -10,7 +10,7 @@ import useGetProjects from "../../../hooks/useGetProjects";
 import Projects from "../../../components/Projects/Projects";
 import Navbar from "../../../components/Navbar/Navbar";
 import ProjectOverviewMain from "../../../components/ProjectOverviewMain/ProjectOverviewMain";
-import AddProjectFAB from "../../../components/AddProjectFAB/AddProjectFAB";
+import FloatingActionButton from "../../../components/FloatingActionButton/FloatingActionButton";
 import AddProjectModal from "../../../components/AddProjectModal/AddProjectModal";
 import Loader from "../../../components/Loader/Loader";
 import EmptyScreen from "../../../components/EmptyScreen/EmptyScreen";
@@ -65,7 +65,10 @@ export default function User({ session }) {
         <Navbar image={session.picture} />
         {emptyScreen}
         {view}
-        <AddProjectFAB FABClicked={() => setShowAddProjectModal(true)} />
+        <FloatingActionButton
+          FABClicked={() => setShowAddProjectModal(true)}
+          image="plus"
+        />
         {addProjectModal}
       </main>
     </div>

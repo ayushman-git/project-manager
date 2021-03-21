@@ -32,12 +32,10 @@
   padding: 1rem;
 }
 
-.table td,
 .table th {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: none;
+  border-right: none;
+  user-select: none;
   // border: 1px solid rgba(255, 255, 255, 0.6);
-  border-bottom: none;
-}
-
-.table tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.06);
 }

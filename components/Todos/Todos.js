@@ -4,16 +4,14 @@ import AddHoverAnimation from "../../HOCs/AddHoverAnimation";
 
 import styles from "./Todos.module.scss";
 
-export default function Todos(props) {
-  let todos;
-  if (props.todos.length) {
-    todos = props.todos.map((todo, index) => (
-      <AddHoverAnimation>
-        <li className={styles.todo} key={index}>
-          {todo}
-        </li>
+export default function Todos({ todos }) {
+  let todosView;
+  if (todos.length) {
+    todosView = todos.map((todo) => (
+      <AddHoverAnimation key={todo.id}>
+        <li className={styles.todo}>{todo.task}</li>
       </AddHoverAnimation>
     ));
   }
-  return <ul className={styles.todosWrapper}>{todos}</ul>;
+  return <ul className={styles.todosWrapper}>{todosView}</ul>;
 }

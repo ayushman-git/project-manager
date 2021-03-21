@@ -1,9 +1,9 @@
 import { useSpring, animated } from "react-spring";
 
-import styles from "./AddProjectFAB.module.scss";
+import styles from "./FloatingActionButton.module.scss";
 import Image from "next/image";
 
-const AddProjectFAB = ({ FABClicked }) => {
+const FloatingActionButton = ({ FABClicked, image }) => {
   const [transition, setTransition] = useSpring(() => ({
     from: { transform: "scale(0.6) rotate(45deg)", opacity: 0 },
     transform: "scale(1) rotate(0deg)",
@@ -13,7 +13,7 @@ const AddProjectFAB = ({ FABClicked }) => {
   const mouseHover = (isHover) => {
     setTransition({
       opacity: isHover ? 1 : 0.6,
-      transform: isHover ? `scale(1.1) rotate(-90deg)` : `scale(1) rotate(0)`,
+      transform: isHover ? `scale(1.1) rotate(90deg)` : `scale(1) rotate(0)`,
     });
   };
 
@@ -26,7 +26,7 @@ const AddProjectFAB = ({ FABClicked }) => {
       onMouseLeave={() => mouseHover(false)}
     >
       <Image
-        src="/images/plus.svg"
+        src={`/images/${image}.svg`}
         width={40}
         height={40}
         layout="responsive"
@@ -35,4 +35,4 @@ const AddProjectFAB = ({ FABClicked }) => {
   );
 };
 
-export default AddProjectFAB;
+export default FloatingActionButton;
