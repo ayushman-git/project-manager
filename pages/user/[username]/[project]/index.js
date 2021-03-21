@@ -17,6 +17,7 @@ import useUpdateShortcuts from "../../../../hooks/useUpdateShortcuts";
 import useDelProject from "../../../../hooks/useDelProject";
 import useDelShortcut from "../../../../hooks/useDelShortcut";
 import AddHoverAnimation from "../../../../HOCs/AddHoverAnimation";
+import useGetProject from "../../../../hooks/useGetProject";
 
 import SetTheme from "../../../../components/SetTheme/SetTheme";
 import Navbar from "../../../../components/Navbar/Navbar";
@@ -49,29 +50,12 @@ export default function project({ session }) {
   let addShortcutModal;
 
   useEffect(() => {
-    let cancelled = false;
     if (router.query?.projectId) {
       localStorage.setItem("projectId", projectId);
     }
-    db.collection("projects")
-      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-      .onSnapshot((doc) => {
-        let project = {};
-        doc.forEach((d) => {
-          if (d.data()) {
-            project = {
-              ...d.data(),
-              projectId: d.id,
-              dueDate: useDaysLeft(d.data().dueDate),
-            };
-            if (!cancelled) setProjectDetail(project);
-          }
-        });
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  }, [projectId]);
+
+  useGetProject(projectId, setProjectDetail);
 
   let projectButtons = (
     <ProjectModify
