@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import firebase from "firebase";
 import { useRouter } from "next/router";
@@ -68,7 +67,7 @@ export default function Navbar({ image }) {
           className={styles.navImgWrap}
           onClick={() => setShowDropdown((prev) => !prev)}
         >
-          <Image
+          <img
             className={styles.navImg}
             src={image ? image : "/images/default-profile.svg"}
             width={30}
