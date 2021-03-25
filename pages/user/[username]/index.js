@@ -16,29 +16,25 @@ import Loader from "../../../components/Loader/Loader";
 import EmptyScreen from "../../../components/EmptyScreen/EmptyScreen";
 
 export default function User({ session }) {
+  firebaseClient();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
 
-  let view, addProjectModal, emptyScreen;
-
-  firebaseClient();
+  let view, emptyScreen;
+  let addProjectModal = showAddProjectModal && (
+    <AddProjectModal
+      closeModal={() => setShowAddProjectModal(false)}
+      session={session}
+      empty={projects.length ? false : true}
+    />
+  );
 
   (async () => {
     const [projects, loading] = await useGetProjects(session.uid);
     setProjects(projects);
     setLoading(loading);
   })();
-
-  if (showAddProjectModal) {
-    addProjectModal = (
-      <AddProjectModal
-        closeModal={() => setShowAddProjectModal(false)}
-        session={session}
-        empty={projects.length ? false : true}
-      />
-    );
-  }
 
   if (!projects.length && !loading) {
     emptyScreen = <EmptyScreen />;
@@ -48,10 +44,8 @@ export default function User({ session }) {
     const activeProject = projects.find((pr) => pr.active);
     const inActiveProjects = projects.filter((pr) => !pr.active);
     view = (
-      <div>
-        <div style={{ marginTop: "2rem" }}>
-          <ProjectOverviewMain project={activeProject} />
-        </div>
+      <div style={{ paddingTop: "2rem" }}>
+        <ProjectOverviewMain project={activeProject} />
         {inActiveProjects && <Projects projects={inActiveProjects} />}
       </div>
     );
