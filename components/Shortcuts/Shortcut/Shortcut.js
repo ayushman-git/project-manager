@@ -6,7 +6,7 @@ import AddHoverAnimation from "../../../HOCs/AddHoverAnimation";
 
 import styles from "./Shortcut.module.scss";
 
-export default function Shortcut({ url, image, delShortcut, id }) {
+export default function Shortcut({ url, image, delShortcut, id, title }) {
   const handleClick = () => {
     window.open(url, "_blank", "noopener");
   };
@@ -42,7 +42,14 @@ export default function Shortcut({ url, image, delShortcut, id }) {
         onMouseLeave={() => hoverHandler(false)}
         className={`${styles.shortcutWrap} shortcutDiv`}
       >
-        <Image src={image} width={30} height={25} />
+        <Image
+          src={image}
+          width={30}
+          height={25}
+          alt={title}
+          quality={100}
+          priority={true}
+        />
       </animated.div>
     </AddHoverAnimation>
   );

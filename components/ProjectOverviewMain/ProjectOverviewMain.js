@@ -16,16 +16,13 @@ import StoriesCompleted from "../Event/StoriesCompleted";
 const ProjectOverviewMain = ({ project }) => {
   const router = useRouter();
 
-  let sortedTasks = useSortTasks(project?.stories);
-  const handleOverciewClick = (e) => {
+  let sortedTasks = project.stories && useSortTasks(project.stories);
+  const handleOverviewClick = (e) => {
     if (e.target.nodeName !== "IMG") {
-      router.push(
-        {
-          pathname: `${router.asPath}/${project.projectName.toLowerCase()}`,
-          query: { projectId: project.projectId },
-        },
-        `${router.asPath}/${project.projectName.toLowerCase()}`
-      );
+      router.push({
+        pathname: `${router.asPath}/${project.projectName.toLowerCase()}`,
+        query: { projectId: project.projectId },
+      });
     }
   };
   const reduceDescription = (num, str) => {
@@ -48,7 +45,7 @@ const ProjectOverviewMain = ({ project }) => {
 
   return (
     <PerspectiveHover>
-      <section onClick={handleOverciewClick} className={styles.projectCard}>
+      <section onClick={handleOverviewClick} className={styles.projectCard}>
         <animated.article className={styles.leftBar}>
           <header className={styles.cardHeader}>
             <h2>

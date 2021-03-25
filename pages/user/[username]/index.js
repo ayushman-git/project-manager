@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
 import { verifyIdToken } from "../../../auth/firebaseAdmin";
 import firebaseClient from "../../../auth/firebaseClient";
 import nookies from "nookies";
+import firebase from "firebase";
 
 import styles from "./index.module.scss";
 
@@ -17,6 +20,7 @@ import EmptyScreen from "../../../components/EmptyScreen/EmptyScreen";
 
 export default function User({ session }) {
   firebaseClient();
+  const router = useRouter();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
@@ -45,7 +49,7 @@ export default function User({ session }) {
     const inActiveProjects = projects.filter((pr) => !pr.active);
     view = (
       <div style={{ paddingTop: "2rem" }}>
-        <ProjectOverviewMain project={activeProject} />
+        {activeProject && <ProjectOverviewMain project={activeProject} />}
         {inActiveProjects && <Projects projects={inActiveProjects} />}
       </div>
     );
@@ -55,6 +59,9 @@ export default function User({ session }) {
 
   return (
     <div className={styles.homeWrap}>
+      <Head>
+        <title>PROTO | {router.query.username}</title>
+      </Head>
       <main className="maxWidth">
         <Navbar image={session.picture} />
         {emptyScreen}
@@ -73,6 +80,7 @@ export async function getServerSideProps(context) {
   try {
     const cookies = nookies.get(context);
     const token = await verifyIdToken(cookies.tknCookies);
+
     return {
       props: {
         session: token,

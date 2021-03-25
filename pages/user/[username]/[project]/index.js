@@ -33,21 +33,28 @@ import Status from "../../../../components/Status/Status";
 import ProjectModify from "../../../../components/ProjectModify/ProjectModify";
 
 export default function project({ session }) {
+  firebaseClient();
+  const router = useRouter();
+  const db = firebase.firestore();
+
   const [projectDetail, setProjectDetail] = useState({});
   const [toggleAddShortcut, setToggleAddShortcut] = useState(false);
   const [toggleProjectDel, setToggleProjectDel] = useState(false);
   const [toggleProjectArchive, setToggleProjectArchive] = useState(false);
-  firebaseClient();
-  const router = useRouter();
-  const db = firebase.firestore();
+  const [projectId, setProjectId] = useState(router.query?.projectId);
 
   const descriptionRef = useRef();
   const titleRef = useRef();
   const tagRef = useRef();
 
-  let projectId = router.query?.projectId || localStorage.getItem("projectId");
   let projectView = <Loader />;
   let addShortcutModal;
+
+  // let projectId = router.query?.projectId;
+
+  useEffect(() => {
+    setProjectId(router.query?.projectId || localStorage.getItem("projectId"));
+  }, []);
 
   useEffect(() => {
     if (router.query?.projectId) {
@@ -247,30 +254,32 @@ export default function project({ session }) {
   });
 
   return (
-    <animated.div className={styles.wrap} style={bgTransition}>
-      <div className="maxWidth" style={{ minHeight: "100vh" }}>
-        <Navbar image={session.picture} />
-        {projectView}
+    <div>
+      <animated.div className={styles.wrap} style={bgTransition}>
+        <div className="maxWidth" style={{ minHeight: "100vh" }}>
+          <Navbar image={session.picture} />
+          {projectView}
 
-        {toggleProjectDel && (
-          <DelModal
-            closeModal={() => setToggleProjectDel(false)}
-            confirmDel={delProject}
-            message="Delete Project?"
-          />
-        )}
-        {toggleProjectArchive && (
-          <DelModal
-            closeModal={() => setToggleProjectArchive(false)}
-            confirmDel={() => {
-              archiveProject();
-              setToggleProjectArchive(false);
-            }}
-            message="Project Completed?"
-          />
-        )}
-      </div>
-    </animated.div>
+          {toggleProjectDel && (
+            <DelModal
+              closeModal={() => setToggleProjectDel(false)}
+              confirmDel={delProject}
+              message="Delete Project?"
+            />
+          )}
+          {toggleProjectArchive && (
+            <DelModal
+              closeModal={() => setToggleProjectArchive(false)}
+              confirmDel={() => {
+                archiveProject();
+                setToggleProjectArchive(false);
+              }}
+              message="Project Completed?"
+            />
+          )}
+        </div>
+      </animated.div>
+    </div>
   );
 }
 

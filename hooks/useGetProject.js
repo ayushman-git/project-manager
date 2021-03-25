@@ -6,25 +6,27 @@ const useGetProject = (projectId, setProjectDetail) => {
   const db = firebase.firestore();
   useEffect(() => {
     let cancelled = false;
-    db.collection("projects")
-      .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
-      .onSnapshot((doc) => {
-        let project = {};
-        doc.forEach((d) => {
-          if (d.data()) {
-            project = {
-              ...d.data(),
-              projectId: d.id,
-              dueDate: useDaysLeft(d.data().dueDate),
-            };
-            if (!cancelled) setProjectDetail(project);
-          }
+    if (projectId) {
+      db.collection("projects")
+        .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
+        .onSnapshot((doc) => {
+          let project = {};
+          doc.forEach((d) => {
+            if (d.data()) {
+              project = {
+                ...d.data(),
+                projectId: d.id,
+                dueDate: useDaysLeft(d.data().dueDate),
+              };
+              if (!cancelled) setProjectDetail(project);
+            }
+          });
         });
-      });
+    }
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [projectId]);
 };
 
 export default useGetProject;
