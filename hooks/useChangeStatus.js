@@ -1,4 +1,5 @@
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 const useChangeStatus = async (active, userId, projectId) => {
   const db = firebase.firestore();

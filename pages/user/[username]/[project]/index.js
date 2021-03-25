@@ -4,8 +4,10 @@ import { verifyIdToken } from "../../../../auth/firebaseAdmin";
 import { useRouter } from "next/router";
 import { useSpring, animated } from "react-spring";
 import firebaseClient from "../../../../auth/firebaseClient";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 import Image from "next/image";
+import Head from "next/head";
 
 import styles from "./index.module.scss";
 
@@ -255,6 +257,9 @@ export default function project({ session }) {
 
   return (
     <div>
+      <Head>
+        <title>PROTO | {router.query.project}</title>
+      </Head>
       <animated.div className={styles.wrap} style={bgTransition}>
         <div className="maxWidth" style={{ minHeight: "100vh" }}>
           <Navbar image={session.picture} />

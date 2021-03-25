@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import styles from "./Navbar.module.scss";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
 import { useRouter } from "next/router";
 import { useSpring, animated } from "react-spring";
 

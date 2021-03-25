@@ -1,5 +1,6 @@
 import { useState } from "react";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 import Image from "next/image";
 import styles from "./ScrumBoard.module.scss";
 

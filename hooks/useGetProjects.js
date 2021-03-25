@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useDaysLeft from "./useDaysLeft";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 const getProjectDetails = async (userId) => {
   const [projects, setProjects] = useState([]);

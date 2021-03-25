@@ -4,7 +4,6 @@ import Head from "next/head";
 import { verifyIdToken } from "../../../auth/firebaseAdmin";
 import firebaseClient from "../../../auth/firebaseClient";
 import nookies from "nookies";
-import firebase from "firebase";
 
 import styles from "./index.module.scss";
 

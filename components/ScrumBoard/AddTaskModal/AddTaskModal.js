@@ -1,5 +1,6 @@
 import { useState } from "react";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
 import Modal from "../../Modal/Modal";

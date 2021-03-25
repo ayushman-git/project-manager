@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import firebase from "firebase";
 import Image from "next/image";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 import styles from "./AddProjectModal.module.scss";
 import theme from "../../assets/theme";
