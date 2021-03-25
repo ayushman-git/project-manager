@@ -8,9 +8,9 @@ export default function Todos({ todos }) {
   let todosView;
   if (todos.length) {
     todosView = todos.map((todo) => (
-      <AddHoverAnimation key={todo.id}>
-        <li className={styles.todo}>{todo.task}</li>
-      </AddHoverAnimation>
+      <li className={styles.todo} key={todo.id}>
+        <AddHoverAnimation>{todo.task}</AddHoverAnimation>
+      </li>
     ));
   }
   return <ul className={styles.todosWrapper}>{todosView}</ul>;

@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
       }
       const token = await user.getIdToken(true);
       setUser(user);
-      console.log(user.photoURL);
       nookies.set(undefined, "user", user.displayName, {
         path: "/",
         maxAge: 3600,

@@ -15,7 +15,7 @@ const StoriesCompleted = ({ stories }) => {
   });
   return (
     <div>
-      <h6>Stories Completed</h6>
+      <strong className="mini-heading">Stories Completed</strong>
       <EventCompleted completed={completed} total={total} />
     </div>
   );

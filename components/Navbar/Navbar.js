@@ -69,6 +69,7 @@ export default function Navbar({ image }) {
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <img
+            alt="profile picture"
             className={styles.navImg}
             src={image ? image : "/images/default-profile.svg"}
             width={30}

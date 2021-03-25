@@ -30,6 +30,7 @@ const FloatingActionButton = ({ FABClicked, image }) => {
         width={40}
         height={40}
         layout="responsive"
+        alt={image}
       />
     </animated.div>
   );
