@@ -23,7 +23,7 @@ export default function SecondaryCards(props) {
             pathname: `${router.asPath}/${props.projectName.toLowerCase()}`,
             query: { projectId: props.projectId },
           }}
-          // as={`${router.asPath}/${props.projectName.toLowerCase()}`}
+          as={`${router.asPath}/${props.projectName.toLowerCase()}`}
         >
           <section
             className={styles.card}

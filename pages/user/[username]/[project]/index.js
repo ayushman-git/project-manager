@@ -10,14 +10,14 @@ import Image from "next/image";
 import styles from "./index.module.scss";
 
 import useChangeStatus from "../../../../hooks/useChangeStatus";
-import useDaysLeft from "../../../../hooks/useDaysLeft";
 import useUpdateFirestore from "../../../../hooks/useUpdateFirestore";
 import useMakeElEditable from "../../../../hooks/useMakeElEditable";
 import useUpdateShortcuts from "../../../../hooks/useUpdateShortcuts";
 import useDelProject from "../../../../hooks/useDelProject";
 import useDelShortcut from "../../../../hooks/useDelShortcut";
-import AddHoverAnimation from "../../../../HOCs/AddHoverAnimation";
 import useGetProject from "../../../../hooks/useGetProject";
+import AddHoverAnimation from "../../../../HOCs/AddHoverAnimation";
+import PerspectiveHover from "../../../../HOCs/PerspectiveHover";
 
 import SetTheme from "../../../../components/SetTheme/SetTheme";
 import Navbar from "../../../../components/Navbar/Navbar";
@@ -206,14 +206,18 @@ export default function project({ session }) {
 
           <aside className={styles.stats}>
             <AddHoverAnimation>
-              <div className={`${styles.statCard} card`}>
-                <TasksCompleted stories={projectDetail.stories} />
-              </div>
+              <PerspectiveHover perspective={100}>
+                <div className={`${styles.statCard} card`}>
+                  <TasksCompleted stories={projectDetail.stories} />
+                </div>
+              </PerspectiveHover>
             </AddHoverAnimation>
             <AddHoverAnimation>
-              <div className={`${styles.statCard} card`}>
-                <StoriesCompleted stories={projectDetail.stories} />
-              </div>
+              <PerspectiveHover perspective={100}>
+                <div className={`${styles.statCard} card`}>
+                  <StoriesCompleted stories={projectDetail.stories} />
+                </div>
+              </PerspectiveHover>
             </AddHoverAnimation>
           </aside>
         </div>
@@ -221,13 +225,17 @@ export default function project({ session }) {
     );
     projectView = (
       <section className={styles.projectWrap}>
-        <div className={styles.projectInfo}>
-          {header}
-          {info}
-          {addShortcutModal}
-        </div>
+        <PerspectiveHover perspective={2000}>
+          <div className={styles.projectInfo}>
+            {header}
+            {info}
+            {addShortcutModal}
+          </div>
+        </PerspectiveHover>
         <h2 style={{ textAlign: "center", marginTop: "4rem" }}>Scrum Board</h2>
-        <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
+        <PerspectiveHover perspective={2000}>
+          <ScrumBoard stories={projectDetail.stories} projectId={projectId} />
+        </PerspectiveHover>
         {projectButtons}
       </section>
     );
