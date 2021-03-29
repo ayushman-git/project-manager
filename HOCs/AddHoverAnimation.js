@@ -13,7 +13,7 @@ const AddHoverAnimation = ({ children }) => {
   const hoverHandler = (isHover) => {
     setElement({
       transform: isHover
-        ? "translateY(-5px) scale(1)"
+        ? "translateY(-3px) scale(1)"
         : "translateY(0px) scale(1)",
     });
   };
@@ -22,7 +22,7 @@ const AddHoverAnimation = ({ children }) => {
     <animated.div
       onMouseEnter={() => hoverHandler(true)}
       onMouseLeave={() => hoverHandler(false)}
-      style={{ ...element, position: "static" }}
+      style={element}
     >
       {children}
     </animated.div>
