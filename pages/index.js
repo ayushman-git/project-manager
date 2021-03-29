@@ -11,12 +11,12 @@ import nookies from "nookies";
 const Home = () => {
   const router = useRouter();
   const { user } = userAuth();
-  const loginViaGoogle = async () => {
+  const loginViaGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     logInWithProvider(provider);
   };
 
-  const loginViaGithub = async () => {
+  const loginViaGithub = () => {
     const provider = new firebase.auth.GithubAuthProvider();
     logInWithProvider(provider);
   };
@@ -42,8 +42,8 @@ const Home = () => {
       </div>
       <section className={styles.cardWrap}>
         <div className={styles.titleWrap}>
-          <h1>Project Manager</h1>
-          <p>You personal project assistant</p>
+          <h1>PROTO</h1>
+          <p>Your personal project assistant</p>
         </div>
         <section className={styles.card}>
           <header>Login / Sigup</header>

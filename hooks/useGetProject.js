@@ -7,8 +7,10 @@ const useGetProject = (projectId, setProjectDetail) => {
   const db = firebase.firestore();
   useEffect(() => {
     let cancelled = false;
+    let unsubscribe;
     if (projectId) {
-      db.collection("projects")
+      unsubscribe = db
+        .collection("projects")
         .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
         .onSnapshot((doc) => {
           let project = {};
@@ -25,6 +27,7 @@ const useGetProject = (projectId, setProjectDetail) => {
         });
     }
     return () => {
+      unsubscribe();
       cancelled = true;
     };
   }, [projectId]);

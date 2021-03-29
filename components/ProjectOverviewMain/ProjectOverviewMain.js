@@ -16,7 +16,7 @@ import StoriesCompleted from "../Event/StoriesCompleted";
 const ProjectOverviewMain = ({ project }) => {
   const router = useRouter();
 
-  let sortedTasks = project.stories && useSortTasks(project.stories);
+  let sortedTasks = (project.stories && useSortTasks(project.stories)) || [];
   const handleOverviewClick = (e) => {
     if (e.target.nodeName !== "IMG") {
       router.push({

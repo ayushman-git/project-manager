@@ -2,16 +2,12 @@
 
 .maxWidth {
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: $maxWidth;
 }
 
 .card {
   border-radius: 30px;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.2)
-  );
+  background: $subtleWhiteGradient;
   color: white;
   padding: 0.1rem 2rem;
   font-size: 0.9rem;
@@ -22,20 +18,20 @@
 }
 
 label {
-  color: #484848;
+  color: $formDefaultColor;
   font-weight: bold;
   font-size: 0.8rem;
   position: relative;
 }
 
 input {
-  background-color: #484848;
+  background-color: $formDefaultColor;
   outline: none;
   border: none;
   font-size: 0.8rem;
   padding: 0.8rem 1.6rem;
   border-radius: 999px;
-  color: rgb(234, 234, 236);
+  color: $inpFontColor;
   margin: 0.8rem 0;
   width: 100%;
   min-width: 16rem;
@@ -44,27 +40,27 @@ input {
 
 textarea {
   box-sizing: border-box;
-  background-color: #484848;
+  background-color: $formDefaultColor;
   outline: none;
   border: none;
   width: 100%;
   font-size: 1rem;
   padding: 0.8rem 1.6rem;
   border-radius: 20px;
-  color: rgb(234, 234, 236);
+  color: $inpFontColor;
   margin: 0.8rem 0;
   resize: vertical;
   min-height: 3rem;
 }
 
 .dropdown-input {
-  background-color: #484848;
+  background-color: $formDefaultColor;
   outline: none;
   border: none;
   font-size: 0.8rem;
   padding: 0.8rem 1.6rem;
   border-radius: 999px;
-  color: rgb(234, 234, 236);
+  color: $inpFontColor;
   margin: 0.8rem 0;
   min-width: 16rem;
   box-sizing: border-box;
@@ -106,7 +102,7 @@ textarea {
   font-weight: bold;
   padding: 0.8rem 1.6rem;
   border-radius: 999px;
-  color: #141414;
+  color: $btnFontColor;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -123,7 +119,7 @@ textarea {
   font-weight: bold;
   padding: 0.8rem 1.6rem;
   border-radius: 999px;
-  color: #141414;
+  color: $btnFontColor;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -158,7 +154,7 @@ td {
 }
 
 .error-inp {
-  box-shadow: inset 0px 0px 0px 1px $failureColor;
+  box-shadow: $errorBoundary;
 }
 
 .input-err-msg {

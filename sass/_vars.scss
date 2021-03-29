@@ -1,5 +1,20 @@
 $borderRadius: 50px;
+
 $successColor: #46b434;
 $failureColor: #d81f1f;
+$btnFontColor: #141414;
+$inpFontColor: #eaeaec;
 
 $modalHeaderFontColor: #696969;
+
+$maxWidth: 1200px;
+
+$formDefaultColor: #484848;
+
+$subtleWhiteGradient: linear-gradient(
+  45deg,
+  rgba(255, 255, 255, 0.1),
+  rgba(255, 255, 255, 0.2)
+);
+
+$errorBoundary: inset 0px 0px 0px 1px $failureColor;

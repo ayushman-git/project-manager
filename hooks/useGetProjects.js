@@ -11,9 +11,10 @@ const getProjectDetails = async (userId) => {
 
   useEffect(() => {
     let cancelled = false;
+    let query;
     setLoading(true);
     (async () => {
-      let query = db.collection("projects");
+      query = db.collection("projects");
       query = query.where("userId", "==", userId);
       query = query.where("archive", "==", false);
       query.onSnapshot((snapshotOfProjects) => {
@@ -31,7 +32,10 @@ const getProjectDetails = async (userId) => {
         }
       });
     })();
-    return () => (cancelled = true);
+    return () => {
+      query();
+      cancelled = true;
+    };
   }, []);
   return [projects, loading];
 };
