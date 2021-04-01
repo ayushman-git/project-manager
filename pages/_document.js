@@ -1,10 +1,11 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, { Html, Main, NextScript } from "next/document";
+import MetaTags from "../components/MetaTags";
 
 export default class MyDoc extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <MetaTags />
         <body>
           <Main />
           <div id="modal" />
