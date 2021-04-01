@@ -17,7 +17,7 @@ const MetaTags = () => {
       />
       <meta
         property="og:image"
-        content="https://proto-lilac.vercel.app/images/og.jpeg"
+        content="https://proto-lilac.vercel.app/images/og.jpg"
       />
       <meta property="og:url" content="https://proto-lilac.vercel.app/" />
       <meta property="og:site_name" content="Proto" />
@@ -30,7 +30,7 @@ const MetaTags = () => {
       />
       <meta
         name="twitter:image"
-        content="https://proto-lilac.vercel.app/images/og.jpeg"
+        content="https://proto-lilac.vercel.app/images/og.jpg"
       />
     </Head>
   );
