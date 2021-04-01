@@ -1,6 +1,8 @@
 
 # Proto
 
+![enter image description here](https://miro.medium.com/max/2160/1*ojHyC9I-5O3nWDZcInUNrA.png)
+
 ## View online
 
 The `master` branch of this project is deployed at <https://proto-lilac.vercel.app>.  
