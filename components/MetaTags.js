@@ -8,9 +8,10 @@ const MetaTags = () => {
         name="description"
         content="Proto is a project manager. You can create projects and track them."
       />
-      <meta property="og:title" content="Proto" />
+      <meta property="og:title" content="Proto - Project Manager" />
 
       {/* og tags */}
+      <meta property="og:type" content="website" />
       <meta
         property="og:description"
         content="Proto is a project manager. You can create projects and track them."
@@ -23,7 +24,7 @@ const MetaTags = () => {
       <meta property="og:site_name" content="Proto" />
 
       {/* twitter tags */}
-      <meta name="twitter:title" content="Proto" />
+      <meta name="twitter:title" content="Proto - Project Manager" />
       <meta
         name="twitter:description"
         content="Proto is a project manager. You can create projects and track them."
