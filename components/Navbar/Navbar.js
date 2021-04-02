@@ -8,6 +8,7 @@ import { useSpring, animated } from "react-spring";
 import clickOutside from "../../hooks/clickOutside";
 
 import PreviousButton from "../PreviousButton/PreviousButton";
+import LoginButtons from "../LoginButtons/LoginButtons";
 
 export default function Navbar({ image, landing }) {
   //State
@@ -17,7 +18,7 @@ export default function Navbar({ image, landing }) {
   const ref = useRef();
   const router = useRouter();
 
-  let signout, goBack, logoTransition;
+  let signout, goBack, logoTransition, profile;
 
   //Spring animation
   const backTransition = useSpring({
@@ -45,6 +46,26 @@ export default function Navbar({ image, landing }) {
     );
   }
 
+  if (image) {
+    profile = (
+      <div ref={ref}>
+        <div
+          className={styles.navImgWrap}
+          onClick={() => setShowDropdown((prev) => !prev)}
+        >
+          <img
+            alt="profile picture"
+            className={styles.navImg}
+            src={image ? image : "/images/default-profile.svg"}
+            width={30}
+            height={30}
+          />
+        </div>
+        {signout}
+      </div>
+    );
+  }
+
   if (router.query?.project) {
     goBack = (
       <animated.div style={backTransition}>
@@ -65,21 +86,7 @@ export default function Navbar({ image, landing }) {
         {goBack}
         <animated.span style={undefined ?? logoTransition}>PROTO</animated.span>
       </strong>
-      <div ref={ref}>
-        <div
-          className={styles.navImgWrap}
-          onClick={() => setShowDropdown((prev) => !prev)}
-        >
-          <img
-            alt="profile picture"
-            className={styles.navImg}
-            src={image ? image : "/images/default-profile.svg"}
-            width={30}
-            height={30}
-          />
-        </div>
-        {signout}
-      </div>
+      {profile}
     </nav>
   );
 }
