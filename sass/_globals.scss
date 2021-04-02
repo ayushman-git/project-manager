@@ -93,6 +93,12 @@ textarea {
   background: rgb(0, 0, 0);
 }
 
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
 .success-btn {
   background-color: $successColor;
   border: none;
