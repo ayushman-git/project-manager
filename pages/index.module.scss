@@ -5,34 +5,72 @@
   transform: translateY(-50%);
 }
 
-.card {
-  background: #ffffff;
-  box-shadow: 0px 0px 39px rgba(0, 0, 0, 0.14), 0px 0px 39px rgba(0, 0, 0, 0.1);
-  border-radius: 50px;
-  padding: 2rem;
-  text-align: center;
-  min-width: 20rem;
-  margin-top: 4rem;
-}
-
-.cardWrap {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 10%;
-}
-
-.titleWrap {
-  text-align: center;
-}
-
-.loginWrap {
-  list-style-type: none;
+.login {
+  align-self: flex-end;
+  width: max-content;
   display: flex;
-  justify-content: space-around;
-  padding: 0;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1rem;
 }
 
-.loginWrap > li {
-  cursor: pointer;
+.bgVid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.5),
+    rgba(13, 154, 219, 0.582)
+  );
+  mix-blend-mode: overlay;
+}
+
+.heroBg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+.heroView {
+  position: relative;
+  z-index: 5;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+.titleWrap > h1 {
+  font-size: 5vw;
+  font-weight: 800;
+  line-height: 2rem;
+}
+
+.titleWrap > p {
+  width: 50ch;
+  opacity: 0.8;
+}
+
+.heroBanner {
+  width: 50ch;
+  display: flex;
+  flex-flow: column nowrap;
 }

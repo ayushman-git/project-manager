@@ -9,7 +9,7 @@ import clickOutside from "../../hooks/clickOutside";
 
 import PreviousButton from "../PreviousButton/PreviousButton";
 
-export default function Navbar({ image }) {
+export default function Navbar({ image, landing }) {
   //State
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -58,7 +58,9 @@ export default function Navbar({ image }) {
   }
 
   return (
-    <nav className={styles.navWrap}>
+    <nav
+      className={`${landing ? styles.navWrapLanding : styles.navWrap} maxWidth`}
+    >
       <strong className={styles.logoNavWrap}>
         {goBack}
         <animated.span style={undefined ?? logoTransition}>PROTO</animated.span>
