@@ -1,0 +1,13 @@
+.footer {
+  display: grid;
+  place-items: center;
+  padding: 4rem 0;
+}
+
+.footer > div {
+  border-top: 1px solid rgba(134, 134, 134, 0.24);
+  padding-top: 2rem;
+  width: 7rem;
+  display: grid;
+  place-items: center;
+}

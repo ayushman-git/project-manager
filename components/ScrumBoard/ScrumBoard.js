@@ -88,7 +88,6 @@ const ScrumBoard = ({ stories, projectId }) => {
     const editedStoryIndex = stories.findIndex((story) => story.id === storyId);
     const updatedStories = stories;
     updatedStories[editedStoryIndex].description = newData;
-    console.log(updatedStories);
     db.collection("projects")
       .where(firebase.firestore.FieldPath.documentId(), "==", projectId)
       .get()

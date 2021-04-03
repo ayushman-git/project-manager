@@ -1,0 +1,36 @@
+.heroView {
+  position: relative;
+  z-index: 5;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+.titleWrap > h1 {
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 800;
+  // line-height: 4rem;
+}
+
+.titleWrap > p {
+  font-size: clamp(12px, 0.8vw, 32px);
+  max-width: 50ch;
+  opacity: 0.8;
+}
+
+.heroBanner {
+  width: 50ch;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.login {
+  align-self: flex-end;
+  width: max-content;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1rem;
+}

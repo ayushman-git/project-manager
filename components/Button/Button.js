@@ -3,7 +3,7 @@ import { useSpring, animated } from "react-spring";
 
 import styles from "./Button.module.scss";
 
-const Button = ({ type, text, image, link }) => {
+const Button = ({ type, text, image, link, event, size }) => {
   let imageView;
   const [btnAnim, set] = useSpring(() => ({
     transform: "translateY(0px) scale(1)",
@@ -11,7 +11,8 @@ const Button = ({ type, text, image, link }) => {
   }));
 
   const clickHandler = () => {
-    window.open(link, "_blank", "noopener");
+    if (link) window.open(link, "_blank", "noopener");
+    if (event) event();
   };
 
   const hover = (isHover) => {
@@ -25,7 +26,13 @@ const Button = ({ type, text, image, link }) => {
 
   if (image)
     imageView = (
-      <Image src={image} alt="" width={30} height={30} layout="fixed" />
+      <Image
+        src={image}
+        alt=""
+        width={size ? size - 20 : 30}
+        height={size ? size - 20 : 30}
+        layout="fixed"
+      />
     );
 
   return (
@@ -34,7 +41,7 @@ const Button = ({ type, text, image, link }) => {
       onMouseLeave={() => hover(false)}
       onClick={clickHandler}
       className={styles[type]}
-      style={btnAnim}
+      style={{ ...btnAnim, width: size + "px", height: size + "px" }}
     >
       {text}
       {imageView}

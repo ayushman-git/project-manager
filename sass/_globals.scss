@@ -179,3 +179,10 @@ form {
 .mini-heading {
   font-size: 0.6rem;
 }
+
+@media screen and (max-width: 1200px) {
+  .maxWidth {
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+}
