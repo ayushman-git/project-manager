@@ -3,6 +3,7 @@
   min-height: 100vh;
   display: grid;
   place-items: center;
+  position: relative;
 }
 
 .openSourceContainer {
@@ -21,4 +22,8 @@
 
 .openSourceLogo {
   color: rgb(24, 72, 204);
+}
+
+.star {
+  position: absolute;
 }

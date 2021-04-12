@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.6",
     "firebase": "^8.2.9",
     "firebase-admin": "^9.5.0",
     "js-cookie": "^2.2.1",
