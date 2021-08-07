@@ -33,7 +33,7 @@ Go there to see the latest version of this app without needing to compile it you
 - CLIENT_CERT_URL
 7. Run `npm run dev` and open `http://localhost:3000/`.
 
-## Story behing Proto
+## Story behind Proto
 For several years, I’ve been on the hunt to find the perfect tool to manage my projects. I’ve used Trello to track my tasks, notion for writing notes, and Milanote for organizing my ideas. These wonderful tools get the job done for the most part and keep you productive.
 
 When working on a personal project, I’ll create notes and store references in notion, then I’ll use Trello to track my tasks. I’ve been using this workflow since the launch of notion back in 2018. But the approach of moving from tool-to-tool adds an extra layer of unnecessary work. I wanted a single tool to handle these needs. You could implement Trello's kanban board, but I still don’t prefer Notion to track my tasks.
